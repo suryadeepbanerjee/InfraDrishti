@@ -1,0 +1,49 @@
+# Environments
+.venv/
+.venv_311/
+.env
+
+# Cache and compiled files
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Outputs and runtime
+backend/outputs/*
+!backend/outputs/.gitkeep
+backend/runtime/*
+!backend/runtime/.gitkeep
+
+# Secrets
+*.key
+*.pem
+credentials.json
+service_account.json
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# Datasets and caches
+data/
+*.tif
+*.shp
+*.gpkg
+*.geojson
+*.csv
+
+# Temporary archives
+*.zip
+*.tar.gz
+*.rar
+
+# Generated JSONs
+routes_*.json
+sites_*.json
+routes_final.json
+routes_updated.json
+sites_final.json
+sites_updated.json

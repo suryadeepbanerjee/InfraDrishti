@@ -1,0 +1,167 @@
+# Infrastructure Intelligence Platform — Infrastructure Profile Weights
+#
+# Each profile defines:
+#   cost_weights: per-layer weights for the cost surface (must sum to 1.0)
+#   mcda_weights: per-metric weights for MCDA ranking (must sum to 1.0)
+#   mcda_directions: "minimise" or "maximise" for each MCDA metric
+#
+# Profiles: highway, railway, power_transmission
+#
+# IMPORTANT: acquisition_friction_index is a spatial proxy/screening index.
+# It is NOT an acquisition probability, ownership probability, or legal claim.
+
+profiles:
+
+  highway:
+    description: "Road corridor (national highway, expressway)"
+    corridor_width_m: 500
+
+    # Cost surface layer weights (sum = 1.0)
+    cost_weights:
+      slope_cost:               0.20
+      building_density:         0.15
+      population_exposure:      0.10
+      land_cover_cost:          0.15
+      river_crossing:           0.10
+      acquisition_friction_index: 0.20
+      dist_to_highway_inverse:  0.10   # inverse: closer to existing highway = lower cost (for tie-ins)
+
+    # MCDA metric weights for ranking candidate routes (sum = 1.0)
+    mcda_weights:
+      route_length_km:            0.10
+      building_count:             0.10
+      population_exposure:        0.10
+      mean_slope_deg:             0.15
+      river_crossings:            0.10
+      forest_overlap_km2:         0.10
+      cropland_overlap_km2:       0.05
+      acquisition_friction_index: 0.20
+      dist_to_highway_m:          0.10
+
+    mcda_directions:
+      route_length_km:            minimise
+      building_count:             minimise
+      population_exposure:        minimise
+      mean_slope_deg:             minimise
+      river_crossings:            minimise
+      forest_overlap_km2:         minimise
+      cropland_overlap_km2:       minimise
+      acquisition_friction_index: minimise
+      dist_to_highway_m:          minimise   # closer to existing highway is better for access
+
+    # Site finder MCDA weights (for highway infrastructure sites)
+    site_mcda_weights:
+      site_area_ha:               0.05   # bigger is slightly better (maximise)
+      mean_slope_deg:             0.20
+      dist_to_highway_m:          0.25
+      acquisition_friction_index: 0.25
+      population_within_1km:      0.15
+      building_count:             0.10
+
+    site_mcda_directions:
+      site_area_ha:               maximise
+      mean_slope_deg:             minimise
+      dist_to_highway_m:          minimise
+      acquisition_friction_index: minimise
+      population_within_1km:      minimise
+      building_count:             minimise
+
+  railway:
+    description: "Rail corridor (single/double track)"
+    corridor_width_m: 300
+
+    cost_weights:
+      slope_cost:               0.25   # rail more sensitive to grade
+      building_density:         0.15
+      population_exposure:      0.10
+      land_cover_cost:          0.15
+      river_crossing:           0.10
+      acquisition_friction_index: 0.15
+      dist_to_railway_inverse:  0.10
+
+    mcda_weights:
+      route_length_km:            0.10
+      building_count:             0.10
+      population_exposure:        0.10
+      mean_slope_deg:             0.20   # grade more critical for rail
+      max_slope_deg:              0.10
+      river_crossings:            0.10
+      forest_overlap_km2:         0.05
+      acquisition_friction_index: 0.15
+      dist_to_railway_m:          0.10
+
+    mcda_directions:
+      route_length_km:            minimise
+      building_count:             minimise
+      population_exposure:        minimise
+      mean_slope_deg:             minimise
+      max_slope_deg:              minimise
+      river_crossings:            minimise
+      forest_overlap_km2:         minimise
+      acquisition_friction_index: minimise
+      dist_to_railway_m:          minimise
+
+    site_mcda_weights:
+      site_area_ha:               0.05
+      mean_slope_deg:             0.25
+      dist_to_railway_m:          0.25
+      acquisition_friction_index: 0.25
+      population_within_1km:      0.10
+      building_count:             0.10
+
+    site_mcda_directions:
+      site_area_ha:               maximise
+      mean_slope_deg:             minimise
+      dist_to_railway_m:          minimise
+      acquisition_friction_index: minimise
+      population_within_1km:      minimise
+      building_count:             minimise
+
+  power_transmission:
+    description: "High-voltage power transmission line"
+    corridor_width_m: 100
+
+    cost_weights:
+      slope_cost:               0.10   # less sensitive to slope than road/rail
+      building_density:         0.20   # safety clearance critical
+      population_exposure:      0.20
+      land_cover_cost:          0.15
+      river_crossing:           0.05
+      acquisition_friction_index: 0.20
+      dist_to_power_inverse:    0.10
+
+    mcda_weights:
+      route_length_km:            0.15
+      building_count:             0.15
+      population_exposure:        0.20
+      mean_slope_deg:             0.05
+      river_crossings:            0.05
+      forest_overlap_km2:         0.10
+      acquisition_friction_index: 0.20
+      dist_to_power_m:            0.10
+
+    mcda_directions:
+      route_length_km:            minimise
+      building_count:             minimise
+      population_exposure:        minimise
+      mean_slope_deg:             minimise
+      river_crossings:            minimise
+      forest_overlap_km2:         minimise
+      acquisition_friction_index: minimise
+      dist_to_power_m:            minimise
+
+    site_mcda_weights:
+      site_area_ha:               0.05
+      mean_slope_deg:             0.10
+      dist_to_power_m:            0.30
+      acquisition_friction_index: 0.30
+      population_within_1km:      0.15
+      building_count:             0.10
+
+    site_mcda_directions:
+      site_area_ha:               maximise
+      mean_slope_deg:             minimise
+      dist_to_power_m:            minimise
+      acquisition_friction_index: minimise
+      population_within_1km:      minimise
+      building_count:             minimise
