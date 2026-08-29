@@ -1,149 +1,687 @@
 # InfraDrishti
 
-InfraDrishti is a geospatial decision-support platform designed to help planners identify suitable infrastructure corridors and candidate sites using real-world spatial data and deterministic geospatial analysis.
+**Geospatial Intelligence for Smarter Infrastructure Planning**
+
+InfraDrishti is a geospatial decision-support platform for early-stage infrastructure planning. It combines real spatial datasets, deterministic GIS analysis, least-cost path computation, and transparent multi-criteria decision analysis (MCDA) to help identify candidate corridors for new linear infrastructure and suitable sites for facilities.
+
+The platform is designed to answer two practical questions:
+
+1. **Where should a new infrastructure corridor go between two locations?**
+2. **Where is a suitable contiguous area for a new facility, given land, terrain, environmental, population, and infrastructure constraints?**
+
+InfraDrishti is a planning-support system. It does not replace cadastral surveys, legal verification, detailed engineering, environmental clearance, or statutory acquisition procedures.
+
+---
 
 ## Overview
 
-InfraDrishti solves the problem of manual, opaque, and data-disconnected early-stage infrastructure planning. It provides a programmatic pipeline for generating, screening, and ranking candidate locations for new linear infrastructure (corridors) and point infrastructure (sites) using real-world topographical, environmental, and demographic data. It produces comprehensive geospatial results (GeoJSON), cost surfaces (TIFF), and transparent multi-criteria decision analysis (MCDA) explanations.
+Early-stage infrastructure planning usually requires combining many different spatial factors:
 
-## Core Capabilities
+- terrain and slope
+- buildings and built-up areas
+- population exposure
+- land cover
+- rivers and surface water
+- protected areas
+- existing infrastructure
+- proximity requirements
+- land-acquisition friction proxies
 
-### Corridor Planner
+These datasets often exist independently and are difficult to evaluate consistently.
 
-Given an origin, destination, infrastructure type, and corridor width, InfraDrishti generates and ranks candidate NEW infrastructure corridors using:
+InfraDrishti brings them into one reproducible spatial workflow:
 
-- real geospatial datasets
-- cost-surface analysis
-- hard spatial constraints
-- `MCP_Geometric` least-cost path analysis
-- multiple alternative corridor generation
-- physical corridor buffering
-- corridor impact metrics
-- transparent weighted MCDA ranking
-- explanations
-
-**This is NOT an existing-road navigation router.** It computes entirely new paths through physical space based on terrain and constraints.
-
-### Site Finder
-
-Given a target location/AOI, facility/infrastructure type, and required land area, InfraDrishti identifies spatially contiguous candidate sites and ranks them using:
-
-- contiguous candidate areas
-- spatial constraints
-- proximity analysis
-- impact metrics
-- MCDA ranking
-- explanations
-
-*Note: The candidate sites are physical land units generated from spatial constraints, not legal/cadastral parcels.*
-
-## Architecture
-
-```mermaid
-flowchart TD
-    A[User Request] --> B[Dynamic AOI]
-    B --> C[Data Discovery]
-    C --> D[Real Data Acquisition]
-    D --> E[Validation & Preprocessing]
-    E --> F[Feature Engineering]
-    F --> G[Corridor Planner]
-    F --> H[Site Finder]
-    G --> I[MCDA]
-    H --> I
-    I --> J[Ranked Results & Explanations]
-    J --> K[FastAPI]
+```text
+User Request
+     |
+     v
+Dynamic Area of Interest (AOI)
+     |
+     v
+Dataset Coverage Discovery
+     |
+     v
+Real Data Acquisition / Local Reuse
+     |
+     v
+Validation
+     |
+     v
+Preprocessing
+     |
+     v
+Feature Engineering
+     |
+     +-----------------------+
+     |                       |
+     v                       v
+Corridor Planner         Site Finder
+     |                       |
+     +-----------+-----------+
+                 |
+                 v
+                MCDA
+                 |
+                 v
+       Ranked, Explained Results
+                 |
+                 v
+              FastAPI
+                 |
+                 v
+             Frontend
 ```
 
-## Data Sources
+The backend is designed to work with changing locations rather than being permanently tied to one demonstration area.
 
-The platform dynamically integrates several global datasets:
+---
 
-- **OpenStreetMap**: Building footprints and road networks (dynamically acquired via Geofabrik/OSM)
-- **Copernicus DEM GLO-30**: 30m global digital elevation model for slope and terrain analysis
-- **ESA WorldCover 2021**: Land cover classification (e.g., Cropland detection via class 40)
-- **WorldPop**: Global 100m population grids for estimating exposure
-- **HydroRIVERS**: River networks for crossing and distance analysis
-- **HydroBASINS**: Hydrological basin boundaries
-- **JRC Global Surface Water**: Surface water extent and occurrence
-- **WDPA / WD-OECM**: World Database on Protected Areas for environmental constraints
+# Core Capabilities
 
-## Dynamic Data Lifecycle
+## 1. Corridor Planner
 
-1. **Request**: User submits an AOI or origin/destination bounding box.
-2. **Discover**: The system identifies required coverage footprints.
-3. **Acquire**: It downloads required tiles/archives or reuses validated local data from `data/raw/`.
-4. **Preprocess**: Raw data is clipped, reprojected, and rasterized/vectorized into `data/interim/`.
-5. **Analyze**: Features are built into `data/processed/` and fed into the scoring algorithms.
-6. **Output**: Results are generated into `outputs/` alongside provenance metadata.
-7. **Clean**: Request-specific temporary workspaces in `runtime/` are pruned.
+The Corridor Planner finds candidate alignments for **new infrastructure** between an origin and destination.
 
-## Spatial Analysis
+### Inputs
 
-The core backend implements:
-- 50m planning grid standard
-- Automated localized UTM CRS projection
-- Cost surface generation and hard physical constraints
-- `MCP_Geometric` graph-based routing for alternatives
-- Route diversification through path-penalty iteration
-- Connected component analysis for site suitability
-- Distance transforms and kernel convolutions for proximity
-- Raster/vector preprocessing pipeline
-- Multi-Criteria Decision Analysis (MCDA)
+- Origin
+- Destination
+- Infrastructure type
+- Corridor width
+- Number of requested alternatives
+- Infrastructure-specific configuration
 
-## Corridor Metrics
+### Processing
 
-The corridor planner computes:
-- route length (km)
-- corridor area (hectares)
+```text
+Origin + Destination
+        |
+        v
+Dynamic Corridor AOI
+        |
+        v
+Required Spatial Data
+        |
+        v
+Aligned 50m Planning Grid
+        |
+        v
+Cost Surface
+        |
+        v
+Hard Constraints
+        |
+        v
+MCP_Geometric
+        |
+        v
+Alternative Path Generation
+        |
+        v
+Physical Corridor Buffer
+        |
+        v
+Impact Metrics
+        |
+        v
+Infrastructure-Specific MCDA
+        |
+        v
+Ranked Corridors + Explanations
+```
+
+The corridor engine uses `skimage.graph.MCP_Geometric` over a spatial cost surface. It is not an existing-road navigation system.
+
+**Important:** InfraDrishti does not use OSRM or another road router to determine the new corridor. Existing roads and other infrastructure are contextual planning factors, not the routing graph that constrains the new alignment.
+
+### Typical corridor metrics
+
+Depending on the configured profile, the backend can evaluate metrics such as:
+
+- route length
+- corridor area
 - building impact
 - population exposure
-- slope / elevation changes
+- mean and maximum slope
 - river crossings
+- water overlap
 - protected-area overlap
-- land-cover impact (e.g. agriculture footprint)
-- infrastructure distances
-- acquisition_friction_index
+- forest/cropland land-cover impact
+- proximity to existing infrastructure
+- `acquisition_friction_index`
 
-## Site Metrics
+Candidate routes are ranked with transparent MCDA rather than an opaque machine-learning prediction.
 
-The site finder computes:
-- site area (hectares)
+---
+
+## 2. Site Finder
+
+The Site Finder identifies **spatially contiguous candidate areas** that satisfy minimum area and planning constraints.
+
+### Inputs
+
+- Target location or AOI
+- Facility/infrastructure type
+- Required area
+- Mandatory constraints
+- Preferred proximity requirements
+- Infrastructure/facility profile
+
+### Processing
+
+```text
+Target Location / AOI
+        |
+        v
+Required Spatial Data
+        |
+        v
+Aligned Planning Grid
+        |
+        v
+Hard-Constraint Mask
+        |
+        v
+Connected Suitable Areas
+        |
+        v
+Minimum Area Filtering
+        |
+        v
+Candidate-Site Metrics
+        |
+        v
+MCDA
+        |
+        v
+Ranked Candidate Sites + Explanations
+```
+
+The current site workflow uses connected-component analysis so candidate areas are spatially contiguous.
+
+For the standard planning configuration:
+
+```text
+Required area: 50 acres
+Equivalent area: approximately 202,342.8 m²
+50m x 50m pixel: 2,500 m²
+Minimum full pixels: 81
+```
+
+Candidate sites are **planning candidates**, not legal cadastral parcels.
+
+The platform does not claim that a candidate site is legally available for acquisition.
+
+---
+
+# Real Spatial Data
+
+InfraDrishti is designed around real geospatial datasets rather than fabricated training data or simulated production results.
+
+## OpenStreetMap
+
+Used for contextual infrastructure and built-environment information, including:
+
+- buildings
+- roads/highways
+- railways
+- stations
+- power infrastructure
+- other mapped features supported by the backend
+
+OSM data is acquired through official Geofabrik extracts or reused from a validated local cache when coverage is sufficient.
+
+OSM completeness depends on the quality and coverage of mapping in the requested area.
+
+## Copernicus DEM GLO-30
+
+Used for:
+
+- elevation
+- terrain analysis
 - slope
-- infrastructure distances (roads, etc.)
+- routing cost
+
+Copernicus GLO-30 is a Digital Surface Model (DSM). It represents the surface, including features such as buildings and vegetation, rather than being a pure bare-earth terrain model.
+
+The backend accounts for this dataset characteristic when interpreting terrain-derived results.
+
+## ESA WorldCover 2021
+
+Used for:
+
+- land-cover classification
+- built-up area exclusion
+- cropland detection
+- forest/tree-cover analysis
+- land-cover based planning factors
+
+The backend uses actual WorldCover class values rather than inventing land-use attributes.
+
+## HydroRIVERS
+
+Used for:
+
+- river geometry
+- river crossings
+- hydrological context
+
+## HydroBASINS
+
+Used for:
+
+- basin boundaries
+- hydrological spatial context
+
+## JRC Global Surface Water
+
+Used for:
+
+- surface-water occurrence
+- water exclusion and water-related planning constraints
+
+## WorldPop
+
+Used for:
+
+- population exposure estimation
+
+Population values are treated as estimates from a gridded population dataset. They are not equivalent to an exact enumeration of residents or a legal displacement assessment.
+
+## WDPA / WD-OECM
+
+Used for:
+
+- protected-area identification
+- environmental hard constraints
+
+Protected areas can be converted into a planning mask so that prohibited areas become unreachable to the routing/site-selection engine where configured as mandatory exclusions.
+
+---
+
+# Dynamic Data Pipeline
+
+InfraDrishti is designed to support location-independent requests.
+
+A new request follows this lifecycle:
+
+```text
+Request
+   |
+   v
+Calculate AOI
+   |
+   v
+Determine required source coverage
+   |
+   v
+Reuse validated local data when available
+        OR
+Download required official source data
+   |
+   v
+Validate source files
+   |
+   v
+Preprocess to common planning grid
+   |
+   v
+Generate spatial features
+   |
+   v
+Run analysis
+   |
+   v
+Validate outputs
+   |
+   v
+Write provenance
+   |
+   v
+Delete temporary raw/intermediate request data
+```
+
+This allows the same backend to support different regions without rewriting the analysis engine for every geography.
+
+For example:
+
+```text
+Kolkata -> Delhi
+Pune -> Mumbai
+Indore -> Bhopal
+Delhi -> Jaipur
+```
+
+can use the same downstream architecture.
+
+---
+
+# Development Mode and Dynamic Mode
+
+The backend supports the concept of two data modes.
+
+## Development Mode
+
+If validated datasets already exist locally and genuinely cover the requested AOI, the backend can reuse them.
+
+This prevents unnecessary re-downloads during development.
+
+## Dynamic Mode
+
+When the current local cache does not cover the requested AOI, the system discovers the necessary source coverage and downloads the required data for the request.
+
+The intended lifecycle is:
+
+```text
+Discover
+  ->
+Download
+  ->
+Validate
+  ->
+Process
+  ->
+Analyze
+  ->
+Generate Result
+  ->
+Save Provenance
+  ->
+Clean Temporary Data
+```
+
+Large geospatial source files are intentionally not stored in the public Git repository.
+
+---
+
+# Spatial Analysis
+
+## Planning Grid
+
+The system standardizes the core planning workflow on a **50 metre grid**.
+
+The exact projected processing extent is determined from the request AOI.
+
+All participating raster layers must be aligned so that they share compatible:
+
+- coordinate reference system
+- extent
+- transform
+- dimensions
+- pixel size
+
+Continuous and categorical datasets are processed using appropriate resampling strategies.
+
+## Cost Surface
+
+The Corridor Planner builds a spatial cost surface from real feature layers.
+
+Examples of soft-cost factors include:
+
+- slope
 - population exposure
-- building impact
-- land cover composition
-- water proximity
-- protected area overlap
-- acquisition_friction_index
+- building density
+- land cover
+- acquisition friction
+- environmental/contextual factors
 
-## Acquisition Friction Index
+Hard constraints are represented as unreachable cells rather than arbitrary large finite costs.
 
-The `acquisition_friction_index` is a spatial screening proxy used to estimate land acquisition difficulty. It is derived using a heuristic formula incorporating building density, agricultural presence (cropland), and proximity to existing infrastructure.
+This prevents the routing engine from choosing a prohibited location merely because it has a sufficiently large numerical penalty.
 
-**Important:** It is a spatial screening proxy only. It is NOT an ownership probability, acquisition probability, legal ownership verification, compensation prediction, or financial acquisition cost.
+## Least-Cost Path
 
-## API
+The base corridor search uses:
 
-The backend exposes a FastAPI service containing the following core endpoints:
+```text
+skimage.graph.MCP_Geometric
+```
 
-- **`POST /project`**
-  - **Purpose**: Initializes the workspace.
-  - **Response**: `{"status": "Project initialized", "message": "Using local workspace"}`
+The system can iterate with spatial penalties around existing candidate routes to search for additional alternatives.
 
-- **`POST /corridor/plan`**
-  - **Purpose**: Generates and ranks alternative infrastructure corridors.
-  - **Body**: `CorridorRequest` (origin, destination, type, width, etc.)
-  - **Response**: Ordered list of candidate corridors with full metrics and GeoJSON geometries.
-  - **Errors**: `500 Internal Server Error` on processing failure.
+The backend does not convert the problem into vehicle navigation or road-network shortest-path routing.
 
-- **`POST /site/find`**
-  - **Purpose**: Identifies contiguous candidate sites matching requirements.
-  - **Body**: `SiteRequest` (target location, area, requirements)
-  - **Response**: Ordered list of candidate sites with metrics and GeoJSON bounding geometries.
-  - **Errors**: `500 Internal Server Error` on processing failure.
+## Route Buffering
 
-## Repository Structure
+A corridor centerline is converted into a physical corridor footprint using the requested corridor width.
+
+Impact metrics can therefore be calculated against the area of land that the infrastructure corridor would actually occupy rather than only against a mathematical centerline.
+
+## Site Contiguity
+
+Site suitability begins with a binary valid/invalid planning mask.
+
+Connected components and deterministic spatial segmentation are then used to produce contiguous candidate areas.
+
+Disconnected cells are not silently combined simply to reach the requested area threshold.
+
+---
+
+# Multi-Criteria Decision Analysis
+
+InfraDrishti uses transparent weighted MCDA rather than a fabricated machine-learning model.
+
+The generic scoring process is:
+
+```text
+Raw Metrics
+    |
+    v
+Normalization
+    |
+    v
+Minimize / Maximize Direction
+    |
+    v
+Configured Weights
+    |
+    v
+Weighted Contributions
+    |
+    v
+Final Score
+    |
+    v
+Rank
+```
+
+For each candidate, the backend can retain:
+
+- raw metric values
+- normalized values
+- configured weights
+- weighted contributions
+- final MCDA score
+- rank
+- explanation/provenance
+
+This allows a reviewer to understand why one candidate was ranked above another.
+
+No training label for "best route" is fabricated, so the core ranking logic remains deterministic.
+
+---
+
+# Acquisition Friction Index
+
+The backend uses the exact field name:
+
+```text
+acquisition_friction_index
+```
+
+It is a **spatial screening proxy**.
+
+It is not:
+
+- ownership probability
+- acquisition probability
+- legal ownership verification
+- cadastral parcel identification
+- compensation prediction
+- financial acquisition cost
+- legal risk assessment
+
+The current documented heuristic is based on spatial indicators including:
+
+```text
+AFI = clip(
+    0.30 × local_building_density
+    + 0.50 × cropland_presence,
+    0,
+    1
+)
+```
+
+Where:
+
+- `local_building_density` is derived from mapped building presence over a local neighbourhood
+- `cropland_presence` is derived from ESA WorldCover class 40
+- WorldCover cropland is treated only as a land-cover class, not as an estimate of crop value
+
+The index should be interpreted as a relative screening indicator, not as a legally or financially calibrated acquisition measure.
+
+---
+
+# Population Exposure
+
+WorldPop is used as an estimate of population distribution.
+
+Where the backend uses the current raster-neighbourhood implementation, the site population metric is represented as a documented approximation over a roughly 1 km square neighbourhood at 50 metre planning resolution.
+
+This is not an exact census count and should not be interpreted as an exact displaced-population forecast.
+
+---
+
+# Hard Constraints
+
+The spatial engines can enforce mandatory exclusions such as:
+
+- protected areas
+- permanent/specified surface water
+- built-up areas where configured
+- slope thresholds
+- minimum site area
+- other infrastructure-specific exclusions
+
+Hard constraints are represented as excluded/unreachable regions.
+
+Final candidates are validated against these restrictions before being returned.
+
+---
+
+# API
+
+The backend exposes a FastAPI service.
+
+The exact API contract should be treated as defined by the Pydantic request/response schemas in `backend/src`.
+
+## Health
+
+```http
+GET /health
+```
+
+Returns backend health/readiness information when configured by the application router.
+
+## Project Initialization
+
+```http
+POST /project
+```
+
+Initializes the project/request workspace.
+
+## Corridor Planning
+
+```http
+POST /corridor/plan
+```
+
+Conceptual request:
+
+```json
+{
+  "infrastructure_type": "highway",
+  "origin": {
+    "name": "Indore",
+    "lon": 75.8577,
+    "lat": 22.7196
+  },
+  "destination": {
+    "name": "Bhopal",
+    "lon": 77.4126,
+    "lat": 23.2599
+  },
+  "corridor_width_m": 100,
+  "n_routes": 3
+}
+```
+
+The backend returns ranked candidate corridor geometries and associated metrics/explanations according to the current response schema.
+
+## Site Finding
+
+```http
+POST /site/find
+```
+
+Conceptual request:
+
+```json
+{
+  "facility_type": "industrial",
+  "location": {
+    "lat": 22.57,
+    "lon": 88.36
+  },
+  "required_area_acres": 50
+}
+```
+
+The backend returns ranked contiguous candidate sites according to the current response schema.
+
+> Request and response examples above are illustrative of the interface shape. The authoritative field names and validation rules are the schemas implemented in `backend/src`.
+
+---
+
+# Outputs
+
+Generated analysis artifacts are written to the project's output area.
+
+Typical outputs include:
+
+```text
+routes.geojson
+routes.csv
+route_explanations.json
+route_cost_surface.tif
+
+sites.geojson
+sites.csv
+site_explanations.json
+
+processing_summary.json
+```
+
+These are generated artifacts and are intentionally excluded from public Git.
+
+The request-specific provenance records can include:
+
+- request ID
+- AOI
+- datasets used
+- source URLs
+- source dates
+- resolutions
+- processing information
+- output references
+- cleanup status
+
+---
+
+# Repository Structure
+
+The repository is organized so that source code, tests, scripts, configuration, runtime data, and the companion frontend remain separated.
 
 ```text
 InfraDrishti/
@@ -157,7 +695,7 @@ InfraDrishti/
 │   │   ├── diagnostics/
 │   │   ├── maintenance/
 │   │   ├── setup/
-│   │   └── run_full_pipeline.py
+│   │   └── ...
 │   ├── src/
 │   │   ├── acquisition/
 │   │   ├── api/
@@ -165,119 +703,475 @@ InfraDrishti/
 │   │   ├── corridor/
 │   │   ├── geospatial/
 │   │   ├── inference/
-│   │   ├── ml/
 │   │   ├── models/
 │   │   ├── preprocessing/
 │   │   ├── scoring/
-│   │   └── site/
+│   │   ├── site/
+│   │   └── ...
 │   ├── tests/
 │   │   ├── integration/
-│   │   └── test_api.py
+│   │   └── ...
+│   ├── ARCHITECTURE.md
 │   ├── environment.yml
+│   ├── RED_FLAGS.md
 │   └── requirements.txt
+│
 ├── frontend/
 │   └── .gitkeep
+│
 ├── .gitignore
 └── README.md
 ```
 
-## Installation
+Generated/runtime contents under `outputs/` and `runtime/` are ignored by Git.
 
-The backend heavily relies on geospatial C-libraries (GDAL, GEOS, PROJ). Therefore, **Conda is the strictly supported installation path on Windows**. 
+---
 
-*Note: Pure `pip install -r requirements.txt` on Windows will likely fail due to missing binary wheels for `fiona`, `rasterio`, and `geopandas` on modern Python versions. Use `environment.yml`.*
+# Installation
 
-### Backend Setup
+InfraDrishti uses geospatial Python libraries that depend on native components such as GDAL, GEOS, and PROJ.
+
+For Windows, the supported setup path is the Conda environment defined by `backend/environment.yml`.
+
+## Clone
 
 ```bash
 git clone https://github.com/suryadeepbanerjee/InfraDrishti.git
-cd InfraDrishti/backend
+cd InfraDrishti
+```
 
-# Create and activate the environment using Conda
+## Create the Backend Environment
+
+```bash
+cd backend
 conda env create -f environment.yml
 conda activate intradrishti-env
 ```
 
-### Environment Variables
+Use the environment name declared in the current `environment.yml` if it differs.
 
-The following environment variable can be configured optionally to speed up elevation dataset downloads:
+## Why Conda?
 
-- `OT_API_KEY`: OpenTopography API Key. (Optional) Accelerates DEM acquisition. Set this via your local `.env` file or export it in your terminal.
+On Windows, packages such as GeoPandas, Rasterio, Fiona, and related GDAL/PROJ/GEOS dependencies are more reliable when installed from compatible precompiled Conda packages.
 
-## Running the Backend
-
-Start the FastAPI application from the `backend/` directory:
+A plain:
 
 ```bash
-cd backend/
+pip install -r requirements.txt
+```
+
+may fail on some Windows/Python combinations because of native geospatial dependencies.
+
+---
+
+# Environment Variables
+
+Only variables actually used by the current backend should be configured.
+
+For example, optional authenticated data providers may use environment variables such as:
+
+```text
+OT_API_KEY=<your-open-topography-key>
+WDPA_API_TOKEN=<your-protected-planet-token>
+```
+
+Never commit real credentials.
+
+Never place credentials in:
+
+- source code
+- configuration files committed to Git
+- README examples
+- public issues
+- public pull requests
+
+---
+
+# Running the Backend
+
+From the backend directory:
+
+```bash
 conda activate intradrishti-env
 uvicorn src.main:app --host 0.0.0.0 --port 8000
 ```
-*(The health endpoint is available at `/` or `/health` depending on the `src.main` router configuration).*
 
-## Running Tests
+The backend should then be available locally at:
 
-Integration and unit tests are written using `pytest`. From the `backend/` directory run:
+```text
+http://localhost:8000
+```
+
+API documentation is provided by FastAPI at the standard documentation routes when enabled by the application:
+
+```text
+http://localhost:8000/docs
+http://localhost:8000/redoc
+```
+
+Verify backend health using the health endpoint implemented by the current application.
+
+---
+
+# Running Tests
+
+From:
+
+```text
+InfraDrishti/backend
+```
+
+run:
 
 ```bash
 pytest tests/
 ```
 
-- Tests in `tests/integration/` (such as `test_backend_final.py` and `test_dynamic.py`) validate the end-to-end corridor and site pipelines.
-- **Warning:** Some integration tests will dynamically download real spatial data (e.g. WorldCover tiles, OSM data) if it is not already cached in `data/raw/`. They require network access.
+Tests are organized to distinguish lightweight validation from integration or real-data workflows where applicable.
 
-## Data Handling
+Network-dependent or real-data tests may require:
 
-Multi-GB geospatial datasets are explicitly **NOT** committed to this Git repository.
-- **Caching**: The system maintains a local cache in `backend/data/raw/`.
-- **Dynamic Acquisition**: Missing data for an AOI is dynamically acquired at runtime.
-- **Workspaces**: Request-specific interim processing is isolated in `backend/runtime/` and pruned upon completion.
+- network access
+- valid data-provider access
+- local data/cache
+- additional processing time
 
-## Outputs
+Do not assume that a unit-test run performs a complete real-data analysis.
 
-Analysis results are saved locally in the `backend/outputs/` directory. Generated contents are intentionally ignored by Git. Output files include:
-- `routes.geojson` / `sites.geojson`: Geospatial geometries.
-- `routes.csv` / `sites.csv`: Tabular metrics.
-- `route_explanations.json`: MCDA decision transparency logic.
-- `route_cost_surface.tif`: The combined raster cost surface used for routing.
-- `processing_summary.json`: Provenance metadata and execution timings.
+---
 
-## Limitations
+# Data Handling
 
-- Population impacts are modeled estimates derived from WorldPop grids, not exact census counts.
-- `acquisition_friction_index` is a spatial screening proxy, not a legal assessment.
-- Completeness of roads and buildings depends heavily on OpenStreetMap coverage in the target AOI.
-- Results are planning-support guides intended for early-stage screening.
+Large spatial datasets are intentionally excluded from the public Git repository.
 
-## Security
+Examples include:
 
-- All API keys and credentials must be supplied via environment variables. None are committed.
-- Ensure that you do not accidentally commit downloaded `.tif`, `.pbf`, or `.zip` datasets. The `.gitignore` is pre-configured to prevent this.
+- OSM PBF extracts
+- WorldPop rasters
+- DEM tiles
+- WorldCover rasters
+- WDPA archives
+- HydroSHEDS archives
+- other large raw geospatial files
 
-## Development Workflow
+The backend can maintain local source data separately from source code.
 
-1. Clone the repository.
-2. Initialize the Conda environment.
-3. Use `backend/scripts/run_full_pipeline.py` or diagnostic scripts to run CLI-based tests without spinning up FastAPI.
-4. Add frontend code inside the isolated `frontend/` directory.
+The public repository therefore contains:
 
-## Frontend
+- processing logic
+- configuration
+- API code
+- tests
+- scripts
+- documentation
 
-Frontend directory is reserved for the companion frontend implementation. Currently, it is a placeholder.
+rather than a multi-gigabyte spatial data warehouse.
 
-## Project Status
+---
 
-- **Backend**: Validated
-- **Frontend**: Under separate development
+# Runtime and Cleanup
 
-## Disclaimer
+Request-specific processing is isolated in runtime workspaces.
 
-InfraDrishti is a planning-support and decision-support tool. It is NOT:
+Conceptually:
+
+```text
+runtime/
+└── <request_id>/
+    ├── raw/
+    ├── interim/
+    ├── processed/
+    └── logs/
+```
+
+The intended lifecycle is:
+
+```text
+Download
+   |
+   v
+Validate
+   |
+   v
+Process
+   |
+   v
+Generate Output
+   |
+   v
+Validate Output
+   |
+   v
+Save Provenance
+   |
+   v
+Delete Temporary Data
+```
+
+If a request fails, enough diagnostic information should be retained to explain the failure rather than silently discarding the evidence.
+
+---
+
+# Security
+
+InfraDrishti is maintained as a public repository.
+
+The repository should never contain:
+
+- API keys
+- access tokens
+- passwords
+- private certificates
+- cloud credentials
+- service-account files
+- personal filesystem paths used as runtime dependencies
+
+Secrets should be supplied through environment variables or another appropriate local/secure mechanism.
+
+Generated outputs, raw datasets, runtime files, virtual environments, caches, and IDE artifacts are excluded from Git.
+
+---
+
+# Development Workflow
+
+A typical contributor workflow is:
+
+```text
+Clone repository
+      |
+      v
+Create Conda environment
+      |
+      v
+Start backend
+      |
+      v
+Run tests
+      |
+      v
+Modify source/config/tests
+      |
+      v
+Validate changes
+      |
+      v
+Commit and push
+```
+
+The companion frontend is intentionally isolated under:
+
+```text
+frontend/
+```
+
+and is maintained separately from the backend implementation.
+
+---
+
+# Frontend
+
+The repository reserves:
+
+```text
+frontend/
+```
+
+for the companion frontend application.
+
+The current frontend directory is intentionally minimal so that a frontend developer can work independently without changing the backend source tree.
+
+The frontend is expected to consume the FastAPI API rather than reimplementing GIS processing in the browser.
+
+The backend remains responsible for:
+
+- data acquisition
+- geospatial preprocessing
+- feature generation
+- routing
+- site selection
+- MCDA
+- provenance
+- result generation
+
+The frontend is responsible for:
+
+- user interaction
+- map visualization
+- request submission
+- processing-state display
+- ranked-result presentation
+- metric comparison
+- explanations
+
+---
+
+# Technical Stack
+
+## Backend
+
+- Python
+- FastAPI
+- GeoPandas
+- Rasterio
+- Shapely
+- PyProj
+- SciPy
+- scikit-image
+- NumPy
+- Pandas
+- PyYAML
+
+## Geospatial Algorithms
+
+- `skimage.graph.MCP_Geometric`
+- raster cost-surface analysis
+- connected-component analysis
+- distance transforms
+- raster/vector clipping
+- rasterization
+- reprojection and alignment
+- weighted MCDA
+
+---
+
+# Design Principles
+
+InfraDrishti follows several core engineering rules.
+
+## Real Data Only
+
+Production analysis must use real source data.
+
+No fabricated:
+
+- ownership data
+- acquisition records
+- route labels
+- site availability
+- population counts
+- probabilities
+- training targets
+
+## Deterministic Core
+
+The primary corridor and site-ranking engines are deterministic.
+
+No fabricated machine-learning model is used to decide which route or site is "best".
+
+## Transparent Scoring
+
+Every candidate should be explainable through its measured metrics, normalization, weights, and weighted contributions.
+
+## Hard Constraints Are Hard
+
+Prohibited areas are excluded rather than assigned an arbitrarily large finite penalty.
+
+## Portable Repository
+
+The code should not depend on one developer's personal filesystem.
+
+Paths should be resolved through project-relative or configurable mechanisms.
+
+## Reusable Geography
+
+The engine is designed to accept new geographic requests without rewriting the core analysis logic for each region.
+
+---
+
+# Limitations
+
+InfraDrishti is an early-stage planning and screening system.
+
+Important limitations include:
+
+### Population
+
+WorldPop values are estimates derived from a gridded population product. They are not exact census counts and should not be interpreted as exact displacement totals.
+
+### OpenStreetMap
+
+Buildings, roads, railway features, stations, and other mapped infrastructure depend on the completeness and accuracy of OpenStreetMap data in the requested area.
+
+### Protected Areas
+
+Protected-area constraints depend on the source data and the configured interpretation of those categories.
+
+### Land Cover
+
+Land-cover classes describe mapped surface categories. They do not directly provide land market value, ownership, compensation, or economic productivity.
+
+### Acquisition Friction
+
+`acquisition_friction_index` is a spatial proxy derived from observable spatial indicators. It is not a legal, financial, ownership, or probability model.
+
+### Candidate Sites
+
+Candidate sites are spatially suitable areas generated from available constraints and metrics. They are not verified cadastral parcels.
+
+### Engineering Decisions
+
+A corridor or site ranked highly by InfraDrishti does not constitute:
+
+- final engineering design
+- legal approval
+- environmental clearance
+- cadastral verification
+- land title verification
+- acquisition approval
+- compensation assessment
+
+Real-world decisions require appropriate engineering surveys, cadastral/legal verification, environmental assessment, field validation, and statutory approval.
+
+---
+
+# Project Status
+
+| Component | Status |
+|---|---|
+| Backend geospatial pipeline | Validated |
+| Dynamic data acquisition architecture | Implemented |
+| Corridor Planner | Implemented |
+| Site Finder | Implemented |
+| Deterministic MCDA | Implemented |
+| FastAPI backend | Implemented |
+| Frontend | Under separate development |
+
+---
+
+# License and Data Attribution
+
+InfraDrishti source-code licensing should be determined by the repository's actual license files and project policy.
+
+Third-party datasets have their own licenses, terms, attribution requirements, and usage restrictions.
+
+Users of InfraDrishti are responsible for complying with the licenses and terms of the underlying data sources.
+
+---
+
+# Project Repository
+
+GitHub:
+
+https://github.com/suryadeepbanerjee/InfraDrishti
+
+---
+
+# Disclaimer
+
+InfraDrishti is a planning-support and decision-support platform.
+
+It is not:
+
 - legal ownership verification
 - cadastral parcel verification
 - final engineering design
 - environmental clearance
 - acquisition probability prediction
 - compensation estimation
+- a substitute for official surveys or approvals
 
-All real-world infrastructure decisions require appropriate survey, engineering, environmental, legal, and administrative validation.
+`acquisition_friction_index` is a spatial screening proxy, not a probability.
+
+Population values are estimates.
+
+All real-world infrastructure decisions require appropriate engineering, environmental, legal, cadastral, administrative, and field validation.
