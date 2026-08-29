@@ -32,7 +32,7 @@ print("\n--- CORRIDOR PLANNER ---")
 route_res = run_corridor_planner(ws_ib.request_id, ws_ib)
 print(f"Attempted: 5 routes")
 print(f"Successful: {route_res['routes']}")
-with open(f"routes_updated.json", "w") as f:
+with open(f"outputs/routes_updated.json", "w") as f:
     json.dump(route_res, f, indent=2, cls=NpEncoder)
 
 print("\nDIVERSITY METRICS:")
@@ -56,7 +56,7 @@ for r in route_res["features"]:
 
 print("\n--- SITE FINDER ---")
 site_res = run_site_finder(ws_ib.request_id, ws_ib)
-with open(f"sites_updated.json", "w") as f:
+with open(f"outputs/sites_updated.json", "w") as f:
     json.dump(site_res, f, indent=2, cls=NpEncoder)
 
 print(f"Candidates before size filter: {site_res['total_candidates_before_filter']}")

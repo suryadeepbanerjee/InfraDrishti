@@ -52,13 +52,13 @@ pipeline.process_corridor(
 print("\n--- 3. INITIATING REAL MCP ROUTING ---")
 route_res = run_corridor_planner(ws_ib.request_id, ws_ib)
 print(f"Generated {route_res['routes']} genuinely different routes.")
-with open(f"routes_{ws_ib.request_id}.json", "w") as f:
+with open(f"outputs/routes_{ws_ib.request_id}.json", "w") as f:
     json.dump(route_res, f)
 
 print("\n--- 4. INITIATING SITE SEARCH ---")
 site_res = run_site_finder(ws_ib.request_id, ws_ib)
 print(f"Generated {site_res['sites']} contiguous 50-acre sites.")
-with open(f"sites_{ws_ib.request_id}.json", "w") as f:
+with open(f"outputs/sites_{ws_ib.request_id}.json", "w") as f:
     json.dump(site_res, f)
 
 print("\n--- 5. CLEANUP ---")

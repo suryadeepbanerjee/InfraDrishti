@@ -60,7 +60,7 @@ else:
 # -----------------------------------------------------------------
 print("\n--- CORRIDOR PLANNER ---")
 route_res = run_corridor_planner(ws.request_id, ws)
-with open("routes_final.json", "w") as f:
+with open("outputs/routes_final.json", "w") as f:
     json.dump(route_res, f, indent=2, cls=NpEncoder)
 
 print(f"Attempted: 5   Successful: {route_res['routes']}")
@@ -94,7 +94,7 @@ for r in route_res["features"]:
 # -----------------------------------------------------------------
 print("\n--- SITE FINDER ---")
 site_res = run_site_finder(ws.request_id, ws)
-with open("sites_final.json", "w") as f:
+with open("outputs/sites_final.json", "w") as f:
     json.dump(site_res, f, indent=2, cls=NpEncoder)
 
 print(f"Candidates before size filter : {site_res['total_candidates_before_filter']}")
