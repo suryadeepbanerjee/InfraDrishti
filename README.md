@@ -31,45 +31,21 @@ These datasets often exist independently and are difficult to evaluate consisten
 
 InfraDrishti brings them into one reproducible spatial workflow:
 
-```text
-User Request
-     |
-     v
-Dynamic Area of Interest (AOI)
-     |
-     v
-Dataset Coverage Discovery
-     |
-     v
-Real Data Acquisition / Local Reuse
-     |
-     v
-Validation
-     |
-     v
-Preprocessing
-     |
-     v
-Feature Engineering
-     |
-     +-----------------------+
-     |                       |
-     v                       v
-Corridor Planner         Site Finder
-     |                       |
-     +-----------+-----------+
-                 |
-                 v
-                MCDA
-                 |
-                 v
-       Ranked, Explained Results
-                 |
-                 v
-              FastAPI
-                 |
-                 v
-             Frontend
+```mermaid
+flowchart TD
+    A[User Request] --> B[Dynamic Area of Interest AOI]
+    B --> C[Dataset Coverage Discovery]
+    C --> D[Real Data Acquisition / Local Reuse]
+    D --> E[Validation]
+    E --> F[Preprocessing]
+    F --> G[Feature Engineering]
+    G --> H[Corridor Planner]
+    G --> I[Site Finder]
+    H --> J[MCDA]
+    I --> J
+    J --> K[Ranked, Explained Results]
+    K --> L[FastAPI]
+    L --> M[Frontend]
 ```
 
 The backend is designed to work with changing locations rather than being permanently tied to one demonstration area.
@@ -93,41 +69,19 @@ The Corridor Planner finds candidate alignments for **new infrastructure** betwe
 
 ### Processing
 
-```text
-Origin + Destination
-        |
-        v
-Dynamic Corridor AOI
-        |
-        v
-Required Spatial Data
-        |
-        v
-Aligned 50m Planning Grid
-        |
-        v
-Cost Surface
-        |
-        v
-Hard Constraints
-        |
-        v
-MCP_Geometric
-        |
-        v
-Alternative Path Generation
-        |
-        v
-Physical Corridor Buffer
-        |
-        v
-Impact Metrics
-        |
-        v
-Infrastructure-Specific MCDA
-        |
-        v
-Ranked Corridors + Explanations
+```mermaid
+flowchart TD
+    A[Origin + Destination] --> B[Dynamic Corridor AOI]
+    B --> C[Required Spatial Data]
+    C --> D[Aligned 50m Planning Grid]
+    D --> E[Cost Surface]
+    E --> F[Hard Constraints]
+    F --> G[MCP_Geometric]
+    G --> H[Alternative Path Generation]
+    H --> I[Physical Corridor Buffer]
+    I --> J[Impact Metrics]
+    J --> K[Infrastructure-Specific MCDA]
+    K --> L[Ranked Corridors + Explanations]
 ```
 
 The corridor engine uses `skimage.graph.MCP_Geometric` over a spatial cost surface. It is not an existing-road navigation system.
@@ -169,32 +123,16 @@ The Site Finder identifies **spatially contiguous candidate areas** that satisfy
 
 ### Processing
 
-```text
-Target Location / AOI
-        |
-        v
-Required Spatial Data
-        |
-        v
-Aligned Planning Grid
-        |
-        v
-Hard-Constraint Mask
-        |
-        v
-Connected Suitable Areas
-        |
-        v
-Minimum Area Filtering
-        |
-        v
-Candidate-Site Metrics
-        |
-        v
-MCDA
-        |
-        v
-Ranked Candidate Sites + Explanations
+```mermaid
+flowchart TD
+    A[Target Location / AOI] --> B[Required Spatial Data]
+    B --> C[Aligned Planning Grid]
+    C --> D[Hard-Constraint Mask]
+    D --> E[Connected Suitable Areas]
+    E --> F[Minimum Area Filtering]
+    F --> G[Candidate-Site Metrics]
+    G --> H[MCDA]
+    H --> I[Ranked Candidate Sites + Explanations]
 ```
 
 The current site workflow uses connected-component analysis so candidate areas are spatially contiguous.
@@ -305,40 +243,18 @@ InfraDrishti is designed to support location-independent requests.
 
 A new request follows this lifecycle:
 
-```text
-Request
-   |
-   v
-Calculate AOI
-   |
-   v
-Determine required source coverage
-   |
-   v
-Reuse validated local data when available
-        OR
-Download required official source data
-   |
-   v
-Validate source files
-   |
-   v
-Preprocess to common planning grid
-   |
-   v
-Generate spatial features
-   |
-   v
-Run analysis
-   |
-   v
-Validate outputs
-   |
-   v
-Write provenance
-   |
-   v
-Delete temporary raw/intermediate request data
+```mermaid
+flowchart TD
+    A[Request] --> B[Calculate AOI]
+    B --> C[Determine required source coverage]
+    C --> D[Reuse validated local data OR Download official source data]
+    D --> E[Validate source files]
+    E --> F[Preprocess to common planning grid]
+    F --> G[Generate spatial features]
+    G --> H[Run analysis]
+    H --> I[Validate outputs]
+    I --> J[Write provenance]
+    J --> K[Delete temporary data]
 ```
 
 This allows the same backend to support different regions without rewriting the analysis engine for every geography.
@@ -372,22 +288,15 @@ When the current local cache does not cover the requested AOI, the system discov
 
 The intended lifecycle is:
 
-```text
-Discover
-  ->
-Download
-  ->
-Validate
-  ->
-Process
-  ->
-Analyze
-  ->
-Generate Result
-  ->
-Save Provenance
-  ->
-Clean Temporary Data
+```mermaid
+flowchart LR
+    A[Discover] --> B[Download]
+    B --> C[Validate]
+    C --> D[Process]
+    D --> E[Analyze]
+    E --> F[Generate Result]
+    F --> G[Save Provenance]
+    G --> H[Clean Temporary Data]
 ```
 
 Large geospatial source files are intentionally not stored in the public Git repository.
@@ -463,26 +372,14 @@ InfraDrishti uses transparent weighted MCDA rather than a fabricated machine-lea
 
 The generic scoring process is:
 
-```text
-Raw Metrics
-    |
-    v
-Normalization
-    |
-    v
-Minimize / Maximize Direction
-    |
-    v
-Configured Weights
-    |
-    v
-Weighted Contributions
-    |
-    v
-Final Score
-    |
-    v
-Rank
+```mermaid
+flowchart TD
+    A[Raw Metrics] --> B[Normalization]
+    B --> C[Minimize / Maximize Direction]
+    C --> D[Configured Weights]
+    D --> E[Weighted Contributions]
+    E --> F[Final Score]
+    F --> G[Rank]
 ```
 
 For each candidate, the backend can retain:
@@ -886,26 +783,14 @@ runtime/
 
 The intended lifecycle is:
 
-```text
-Download
-   |
-   v
-Validate
-   |
-   v
-Process
-   |
-   v
-Generate Output
-   |
-   v
-Validate Output
-   |
-   v
-Save Provenance
-   |
-   v
-Delete Temporary Data
+```mermaid
+flowchart TD
+    A[Download] --> B[Validate]
+    B --> C[Process]
+    C --> D[Generate Output]
+    D --> E[Validate Output]
+    E --> F[Save Provenance]
+    F --> G[Delete Temporary Data]
 ```
 
 If a request fails, enough diagnostic information should be retained to explain the failure rather than silently discarding the evidence.
@@ -936,26 +821,14 @@ Generated outputs, raw datasets, runtime files, virtual environments, caches, an
 
 A typical contributor workflow is:
 
-```text
-Clone repository
-      |
-      v
-Create Conda environment
-      |
-      v
-Start backend
-      |
-      v
-Run tests
-      |
-      v
-Modify source/config/tests
-      |
-      v
-Validate changes
-      |
-      v
-Commit and push
+```mermaid
+flowchart TD
+    A[Clone repository] --> B[Create Conda environment]
+    B --> C[Start backend]
+    C --> D[Run tests]
+    D --> E[Modify source/config/tests]
+    E --> F[Validate changes]
+    F --> G[Commit and push]
 ```
 
 The companion frontend is intentionally isolated under:
