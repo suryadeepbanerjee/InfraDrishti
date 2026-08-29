@@ -1,5 +1,5 @@
 from pathlib import Path
-f = Path(r"D:\Learn\B_Tech\Hackathons\1_BuildWithBharat\Prototype\Model\src\corridor\planner.py")
+f = Path(r"D:\Learn\B_Tech\Hackathons\1_BuildWithBharat\Prototype\src\corridor\planner.py")
 c = f.read_text(encoding='utf-8')
 c = c.replace(
     'return cost, meta, slope, pop, build, lc, rivers, afi, dist_highway, pa',

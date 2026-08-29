@@ -11,7 +11,7 @@ import json
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-BASE_DIR = Path(r"D:\Learn\B_Tech\Hackathons\1_BuildWithBharat\Prototype\Model")
+BASE_DIR = Path(__file__).resolve().parent.parent
 PROCESSED_DIR = BASE_DIR / "data/processed"
 COST_DIR = PROCESSED_DIR / "cost_components"
 COST_DIR.mkdir(parents=True, exist_ok=True)

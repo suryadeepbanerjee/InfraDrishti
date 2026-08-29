@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 import numpy as np
 
-BASE_DIR = Path(r"D:\Learn\B_Tech\Hackathons\1_BuildWithBharat\Prototype\Model")
+BASE_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = BASE_DIR / "outputs"
 
 def test_routes_generated():

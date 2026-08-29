@@ -28,7 +28,7 @@ router = APIRouter()
 
 @router.post("/project")
 def create_project():
-    return {"status": "Project initialized", "message": "Using D:\\Learn\\B_Tech\\Hackathons\\1_BuildWithBharat\\Prototype\\Model"}
+    return {"status": "Project initialized", "message": "Using local workspace"}
 
 @router.post("/corridor/plan")
 def plan_corridor(req: CorridorRequest):
