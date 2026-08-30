@@ -1,0 +1,1609 @@
+/* =========================================================
+   INFRASTRUCTURE INTELLIGENCE - SPATIAL DECISION ENGINE
+   PIXEL-PERFECT CYBER GIS UI SYSTEM
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background: #04090e;
+  color: #e2f1f5;
+  font-family: 'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+.app {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 240, 255, 0.08), transparent 60%),
+    linear-gradient(180deg, #04090e 0%, #060c14 100%);
+}
+
+/* =========================================================
+   TOP HEADER BAR
+   ========================================================= */
+
+.topBar {
+  height: 58px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(4, 12, 19, 0.92);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.18);
+  backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 50;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandIcon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  background: rgba(0, 240, 255, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+
+.brandName {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #e2f1f5;
+}
+
+.brandSub {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #5b7e8c;
+  margin-top: 2px;
+}
+
+/* CENTER PILL BADGES */
+.centerHeaderPills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerPill {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  color: #7dd3fc;
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.highlightPill {
+  color: #00f0ff;
+  border-color: #00f0ff;
+  background: rgba(0, 240, 255, 0.12);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+}
+
+/* RIGHT HEADER ACTIONS */
+.rightHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.projectMenuBtn {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: #38bdf8;
+  background: #091724;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.projectMenuBtn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+.systemStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #34d399;
+}
+
+.systemStatus small {
+  display: block;
+  font-size: 7px;
+  color: #557973;
+  margin-top: 1px;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00ff9d;
+  box-shadow: 0 0 10px #00ff9d;
+}
+
+/* =========================================================
+   MAIN LAYOUT & GRID
+   ========================================================= */
+
+.mainContainer {
+  flex: 1;
+  width: 100%;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.plannerGrid {
+  flex: 1;
+  display: flex;
+  position: relative;
+  height: 100%;
+  min-height: 0;
+}
+
+/* =========================================================
+   LEFT SIDEBAR PANEL (DRAWER)
+   ========================================================= */
+
+.leftPanel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 340px;
+  height: 100%;
+  background: rgba(4, 12, 19, 0.95);
+  border-right: 1px solid rgba(0, 240, 255, 0.2);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transform: translateX(-110%);
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  padding: 16px;
+}
+
+.leftPanel.open {
+  transform: translateX(0);
+}
+
+/* NUMBERED NAVIGATION STEPS (01 to 10) */
+.navStepsList {
+  background: rgba(7, 16, 25, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 10px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.navStepItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.navStepItem:hover {
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.navStepItem.activeStep {
+  background: rgba(0, 240, 255, 0.12);
+  border-left: 3px solid #00f0ff;
+}
+
+.stepIdx {
+  font-size: 9px;
+  font-weight: 800;
+  color: #00f0ff;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 240, 255, 0.1);
+  border-radius: 4px;
+}
+
+.stepTitle {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #d1eae5;
+}
+
+.stepDesc {
+  font-size: 8px;
+  color: #557973;
+}
+
+/* CONTROLS SECTION */
+.controlsSection {
+  background: rgba(7, 16, 25, 0.9);
+  border: 1px solid rgba(0, 240, 255, 0.16);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.panelGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+.groupHeader, .groupTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupHeader, .titleText {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #00f0ff;
+}
+
+.subBadge {
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #557973;
+}
+
+/* ROUTE INPUT PAIR WITH SWAP BUTTON */
+.routeInputPair {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.inputField label {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #5c7c77;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.swapBtn {
+  align-self: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #091a24;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #00f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: -4px 0;
+  z-index: 5;
+  transition: transform 0.2s;
+}
+
+.swapBtn:hover {
+  transform: rotate(180deg);
+  background: rgba(0, 240, 255, 0.2);
+}
+
+/* CONSTRAINT ROWS */
+.constraintRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.rowIcon {
+  display: flex;
+  color: #00f0ff;
+}
+
+.cyanIcon { color: #00f0ff; }
+
+.rowText {
+  flex: 1;
+}
+
+.rowTitle {
+  font-size: 10px;
+  font-weight: 700;
+  color: #cde4e0;
+}
+
+.rowSub {
+  font-size: 7px;
+  color: #557973;
+  margin-top: 1px;
+}
+
+.toggleSwitch {
+  width: 30px;
+  height: 16px;
+  border-radius: 20px;
+  background: #182825;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.sliderHandle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #60716d;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.toggleSwitch.on {
+  background: rgba(0, 240, 255, 0.25);
+}
+
+.toggleSwitch.on .sliderHandle {
+  transform: translateX(14px);
+  background: #00f0ff;
+  box-shadow: 0 0 8px #00f0ff;
+}
+
+/* GRADIENT SLIDERS */
+.sliderControlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.sliderHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #8daea8;
+}
+
+.sliderValText {
+  color: #00f0ff;
+}
+
+.rangeWrapper input[type="range"] {
+  width: 100%;
+  height: 4px;
+  accent-color: #00f0ff;
+  cursor: pointer;
+}
+
+.purpleSlider input[type="range"] { accent-color: #a855f7; }
+.orangeSlider input[type="range"] { accent-color: #f97316; }
+.cyanSlider input[type="range"] { accent-color: #00f0ff; }
+
+/* RUN ANALYSIS BUTTON */
+.runAnalysisBtn {
+  width: 100%;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #00f0ff;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 160, 255, 0.08));
+  border: 1px solid #00f0ff;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+}
+
+.runAnalysisBtn:hover {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(0, 160, 255, 0.18));
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.panelFootnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 7px;
+  color: #557973;
+}
+
+.liveBadgeTag {
+  color: #34d399;
+  font-weight: 800;
+}
+
+/* =========================================================
+   RIGHT PANEL (MAP & SCORE CARDS)
+   ========================================================= */
+
+.rightSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  min-width: 0;
+  overflow-y: auto; /* Allow scrolling if dashboard is too tall */
+  padding-right: 4px; /* Scrollbar padding */
+}
+
+/* MAP TOP HEADER WITH MODE TABS & SUMMARY KPI CARDS */
+.mapTopHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(7, 16, 25, 0.9);
+  border: 1px solid rgba(0, 240, 255, 0.16);
+  border-radius: 10px;
+  gap: 16px;
+}
+
+.mapToolbarTabs {
+  display: flex;
+  gap: 6px;
+}
+
+.mapModeTab {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: #5c7c77;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mapModeTab.active {
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.12);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+}
+
+.topKpiCards {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kpiCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(4, 12, 19, 0.8);
+  border: 1px solid rgba(0, 240, 255, 0.18);
+  border-radius: 6px;
+}
+
+.kpiIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cyanGlow { background: rgba(0, 240, 255, 0.15); color: #00f0ff; }
+.blueGlow { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.greenGlow { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+.purpleGlow { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+
+.kpiVal {
+  font-size: 14px;
+  font-weight: 800;
+  color: #e2f1f5;
+  line-height: 1;
+}
+
+.kpiLabel {
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #557973;
+  margin-top: 2px;
+}
+
+.purpleKpiCard {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.purpleScoreVal {
+  color: #c084fc;
+}
+
+.purpleScoreVal span {
+  font-size: 8px;
+  color: #7e22ce;
+}
+
+/* =========================================================
+   INTERACTIVE MAP CONTAINER & CANVAS
+   ========================================================= */
+
+.analysisMapContainer {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 240, 255, 0.16);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #070b10;
+  position: relative;
+  flex: 1;
+  min-height: 55vh; /* Force map to take at least 55% of the viewport height */
+  flex-shrink: 0;   /* Don't allow dashboard to squash it further */
+}
+
+.mapLibreCanvas {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Ensure the MapLibre GL map fills its container */
+.mapLibreCanvas .maplibregl-map {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.mapLibreCanvas .maplibregl-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* MAP CONTROLS OVERLAY (Right side zoom/3D/buffer/fullscreen buttons) */
+.mapControlsOverlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+
+.mapControlsOverlay button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  background: rgba(7, 16, 25, 0.85);
+  color: #8daea8;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 800;
+  transition: all 0.15s;
+}
+
+.mapControlsOverlay button:hover {
+  background: rgba(0, 240, 255, 0.15);
+  color: #00f0ff;
+  border-color: rgba(0, 240, 255, 0.4);
+}
+
+.mapControlsOverlay button.activeControl {
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+/* ── Fullscreen ── */
+.analysisMapContainer.fullscreenMap {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
+  border-radius: 0;
+  border: none;
+}
+.analysisMapContainer.fullscreenMap .mapLibreCanvas {
+  min-height: 100vh;
+}
+
+/* ─────────────────────────────────────────────────────────
+   MAP STYLE SWITCHER PANEL (floating, left side)
+───────────────────────────────────────────────────────── */
+.mapStylePanel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(7, 16, 25, 0.88);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 6px;
+  backdrop-filter: blur(6px);
+}
+
+.mapStylePanelTitle {
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #557973;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.mapStyleBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: #8daea8;
+}
+
+.mapStyleBtn:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.25);
+  color: #00f0ff;
+}
+
+.mapStyleBtn.activeStyle {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.5);
+  color: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.styleIcon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.styleLabel {
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   ROUTE COLOUR LEGEND (floating bottom-left)
+───────────────────────────────────────────────────────── */
+.routeLegendPanel {
+  position: absolute;
+  bottom: 40px;
+  left: 12px;
+  z-index: 10;
+  background: rgba(7, 16, 25, 0.88);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.routeLegendTitle {
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #557973;
+  margin-bottom: 2px;
+}
+
+.routeLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 8px;
+  color: #a4c9c2;
+}
+
+.routeLegendDot {
+  display: inline-block;
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   CUSTOM MAP MARKERS (Origin & Destination Pins)
+   ========================================================= */
+
+.customMapMarker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.markerPulse {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.markerPulse::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.markerPulse::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  animation: pulseRing 2s ease-out infinite;
+  z-index: 1;
+}
+
+.greenPulse::before {
+  background: #00f0ff;
+  box-shadow: 0 0 12px #00f0ff;
+}
+
+.greenPulse::after {
+  border: 2px solid #00f0ff;
+}
+
+.redPulse::before {
+  background: #f87171;
+  box-shadow: 0 0 12px #f87171;
+}
+
+.redPulse::after {
+  border: 2px solid #f87171;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.markerBadge {
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: rgba(7, 16, 25, 0.9);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 4px;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #00f0ff;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.markerBadge strong {
+  display: block;
+  font-size: 9px;
+  color: #e2f1f5;
+}
+
+.destBadge {
+  border-color: rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+/* Hide default MapLibre attribution for cleaner UI */
+.maplibregl-ctrl-attrib {
+  display: none !important;
+}
+
+/* MAP SCALE INDICATOR */
+.mapScaleIndicator {
+  position: absolute;
+  bottom: 16px;
+  left: 12px;
+  font-size: 8px;
+  color: #557973;
+  letter-spacing: 1px;
+  padding: 4px 8px;
+  background: rgba(4, 12, 19, 0.8);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 4px;
+  z-index: 10;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GIS LAYER TOGGLE PANEL
+═══════════════════════════════════════════════════════════ */
+.gisLayerPanel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(5, 12, 20, 0.9);
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  border-radius: 8px;
+  padding: 10px 8px;
+  backdrop-filter: blur(8px);
+  min-width: 100px;
+}
+
+.gisLayerTitle {
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #00f0ff;
+  text-align: center;
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+
+.gisLayerBtn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: #8daea8;
+}
+
+.gisLayerBtn:hover {
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.gisLayerOn {
+  border-color: rgba(0, 240, 255, 0.2);
+  background: rgba(0, 240, 255, 0.07);
+  color: #e2f1f5;
+}
+
+.gisLayerOff {
+  opacity: 0.45;
+  color: #557973;
+}
+
+.gisLayerEmoji {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.gisLayerLabel {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex: 1;
+}
+
+.gisLayerToggleDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f0ff;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.gisLayerOff .gisLayerToggleDot {
+  background: #2e4a45;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GIS MAP LEGEND PANEL (bottom-right)
+═══════════════════════════════════════════════════════════ */
+.gisLegend {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 10;
+  background: rgba(5, 12, 20, 0.95);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 175px;
+}
+
+.gisLegendTitle {
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #00f0ff;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.gisLegendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 8px;
+  color: #a4c9c2;
+}
+
+.gisLegendLine {
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.gisLegendDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATED GIS MARKERS — Origin & Destination
+═══════════════════════════════════════════════════════════ */
+.gisMarker {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.gisMarkerRing {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  animation: gisRingPulse 2s ease-out infinite;
+}
+
+.ring1 { width: 40px; height: 40px; animation-delay: 0s; }
+.ring2 { width: 56px; height: 56px; animation-delay: 0.7s; }
+
+.originGisMarker .gisMarkerRing { border-color: #00f0ff; }
+.destGisMarker   .gisMarkerRing { border-color: #ff4d6d; }
+
+@keyframes gisRingPulse {
+  0%   { opacity: 0.8; transform: scale(0.6); }
+  100% { opacity: 0;   transform: scale(1.5); }
+}
+
+.gisMarkerCore {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid #071017;
+  z-index: 2;
+  position: relative;
+}
+
+.originGisMarker .gisMarkerCore {
+  background: #00f0ff;
+  box-shadow: 0 0 20px #00f0ff, 0 0 40px rgba(0,240,255,0.4);
+}
+
+.destGisMarker .gisMarkerCore {
+  background: #ff4d6d;
+  box-shadow: 0 0 20px #ff4d6d, 0 0 40px rgba(255,77,109,0.4);
+}
+
+.gisMarkerLabel {
+  position: absolute;
+  left: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(5, 12, 20, 0.92);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.destGisMarker .gisMarkerLabel {
+  border-color: rgba(255, 77, 109, 0.4);
+}
+
+.gisMarkerTag {
+  display: block;
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #00f0ff;
+  opacity: 0.8;
+}
+
+.destGisMarker .gisMarkerTag {
+  color: #ff4d6d;
+}
+
+.gisMarkerCity {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  color: #e2f1f5;
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+}
+
+
+/* =========================================================
+   BOTTOM DASHBOARD & 5 EVALUATION CARDS
+   ========================================================= */
+
+.bottomDashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0; /* Prevent it from being squished by flexbox */
+}
+
+/* STATUS BAR */
+.dashboardStatusBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(7, 16, 25, 0.95);
+  border: 1px solid rgba(0, 240, 255, 0.18);
+  border-radius: 6px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #799a94;
+}
+
+.greenStatus {
+  color: #34d399;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.statusDotDivider {
+  color: #1e3a35;
+}
+
+.greenText {
+  color: #34d399;
+}
+
+/* 5 EVALUATION CARDS GRID */
+.evalCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.evalCard {
+  background: rgba(7, 16, 25, 0.95);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 10px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.1);
+  transition: all 0.2s ease-out;
+}
+.evalCard:hover {
+  border-color: rgba(0, 240, 255, 0.6);
+  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.cardHeaderTitle, .cardHeaderTitleRow {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #799a94;
+}
+
+.cardSubTabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.subTabBtn {
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  color: #557973;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.subTabBtn.activeTab {
+  color: #00f0ff;
+  border-color: rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.corridorHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.routeCodeTag {
+  font-size: 8px;
+  font-weight: 800;
+  color: #00f0ff;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.redTag { color: #f87171; }
+
+.routeNameText {
+  font-size: 12px;
+  color: #d1eae5;
+  display: block;
+  margin-top: 2px;
+}
+
+.scoreBadgeBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1;
+}
+
+.scoreNum {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.greenScoreBox { color: #34d399; text-shadow: 0 0 10px rgba(52,211,153,0.4); }
+.redScoreBox { color: #f87171; text-shadow: 0 0 10px rgba(248,113,113,0.4); }
+
+.scoreBadgeBox small {
+  font-size: 8px;
+  color: #557973;
+  margin-top: 4px;
+}
+
+.feasiblePill, .infeasiblePill {
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+.feasiblePill { color: #34d399; background: rgba(52, 211, 153, 0.12); }
+.infeasiblePill { color: #f87171; background: rgba(248, 113, 113, 0.12); }
+
+.corridorStatsMini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 240, 255, 0.08);
+}
+
+.corridorStatsMini span {
+  font-size: 6px;
+  color: #557973;
+  display: block;
+}
+
+.corridorStatsMini strong {
+  font-size: 8px;
+  color: #cde4e0;
+  display: block;
+  margin-top: 2px;
+}
+
+/* CARD 2: INFEASIBLE CARD */
+.infeasibleEvalCard {
+  border-color: rgba(248, 113, 113, 0.3);
+  background: rgba(25, 10, 10, 0.85);
+}
+
+.reasonAlertBox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 7px;
+  color: #f87171;
+  padding: 6px 8px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 4px;
+}
+
+/* CARD 3: RISK ANALYSIS MATRIX */
+.riskMatrixList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.riskRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #92b3ad;
+  padding: 2px 0;
+}
+
+.riskBadge {
+  font-size: 6px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.lowRisk { color: #34d399; background: rgba(52, 211, 153, 0.12); }
+.medRisk { color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
+.highRisk { color: #f87171; background: rgba(248, 113, 113, 0.12); }
+
+/* CARD 4: RECOMMENDED CORRIDOR */
+.recommendedCard {
+  border-color: rgba(0, 240, 255, 0.35);
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(7, 16, 25, 0.9));
+}
+
+.recCardTitleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.crownIcon {
+  font-size: 16px;
+}
+
+.recTitle {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fbbf24;
+}
+
+.recRouteSub {
+  font-size: 9px;
+  color: #e2f1f5;
+  margin-top: 1px;
+}
+
+.recScoreBadge {
+  margin-left: auto;
+  text-align: right;
+  color: #00f0ff;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.recScoreBadge small { font-size: 7px; color: #557973; }
+
+.recTagPill {
+  font-size: 6px;
+  color: #34d399;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.recChecklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.recChecklist li {
+  font-size: 7.5px;
+  color: #a4c9c2;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.greenCheck {
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.targetRadarBackdrop {
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 240, 255, 0.12);
+  box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05);
+  pointer-events: none;
+}
+
+/* CARD 5: DATA & SOURCES */
+.datasetSourcesList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.datasetRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #92b3ad;
+}
+
+.dataBadge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.yellowBadge { background: rgba(250, 204, 21, 0.1); color: #facc15; }
+.purpleBadge { background: rgba(192, 132, 252, 0.1); color: #c084fc; }
+
+.methodologyFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 10px;
+  color: #8daea8;
+}
+.methodologyFooter strong { color: #00f0ff; }
+
+/* REQUEST HISTORY DRAWER */
+.historyDrawer {
+  position: absolute;
+  top: 60px; /* Below topBar */
+  right: -320px;
+  width: 300px;
+  height: calc(100% - 60px);
+  background: rgba(7, 16, 25, 0.95);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(0, 240, 255, 0.2);
+  z-index: 200;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+.historyDrawer.open {
+  right: 0;
+}
+.historyHeader {
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: #8daea8;
+  cursor: pointer;
+  padding: 4px;
+}
+.closeBtn:hover {
+  color: #00f0ff;
+}
+.historyList {
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.historyItem {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 6px;
+  padding: 12px;
+}
+.historyRow1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.historyRow2 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.statusPill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.statusPill.success { background: rgba(52, 211, 153, 0.1); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.2); }
+.statusPill.error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+.infraBadge { font-size: 9px; background: rgba(0, 240, 255, 0.1); color: #00f0ff; padding: 2px 6px; border-radius: 4px; }
+
+/* APP MODE TOGGLE TABS */
+.modeToggleContainer { display: flex; gap: 10px; background: rgba(0, 0, 0, 0.4); padding: 4px; border-radius: 8px; }
+.modeBtn { padding: 6px 12px; background: transparent; color: #8daea8; border: 1px solid transparent; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; transition: all 0.2s; }
+.modeBtn.active { background: rgba(0, 240, 255, 0.2); color: #00f0ff; border-color: rgba(0, 240, 255, 0.5); }
+.modeBtn:hover:not(.active) { background: rgba(255,255,255,0.05); color: #e2f1f5; }
+
+/* =========================================================
+   LOCATION SEARCH AUTOCOMPLETE DROPDOWN
+   ========================================================= */
+.locationSearch {
+  position: relative;
+  width: 100%;
+}
+
+.searchInputBox {
+  display: flex;
+  align-items: center;
+  background: rgba(4, 12, 19, 0.8);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 6px;
+  padding: 8px 10px;
+  gap: 8px;
+}
+
+.geoInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e2f1f5;
+  font-size: 11px;
+  font-family: inherit;
+}
+.geoInput::placeholder {
+  color: #557973;
+}
+
+.suggestionsMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background: rgba(7, 16, 25, 0.98);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  border-radius: 6px;
+  backdrop-filter: blur(12px);
+  z-index: 200;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.suggestionItem {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+  transition: all 0.15s;
+}
+.suggestionItem:last-child {
+  border-bottom: none;
+}
+.suggestionItem:hover {
+  background: rgba(0, 240, 255, 0.15);
+  padding-left: 16px;
+}
+
+.suggName {
+  font-size: 11px;
+  font-weight: 800;
+  color: #00f0ff;
+  letter-spacing: 0.5px;
+}
+
+.suggDesc {
+  font-size: 9px;
+  color: #8daea8;
+  margin-top: 3px;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1280px) {
+  .evalCardsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .plannerGrid {
+    grid-template-columns: 1fr;
+  }
+  .evalCardsGrid {
+    grid-template-columns: 1fr;
+  }
+  .centerHeaderPills {
+    display: none;
+  }
+}

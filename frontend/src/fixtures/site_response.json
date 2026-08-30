@@ -1,0 +1,90 @@
+{
+  "request_id": "site_987654",
+  "status": "COMPLETED",
+  "sites": [
+    {
+      "id": "SITE-A",
+      "rank": 1,
+      "mcda_score": 88.5,
+      "metrics": {
+        "area_acres": 52.4,
+        "area_surplus_acres": 2.4,
+        "mean_slope_pct": 2.1,
+        "max_slope_pct": 4.5,
+        "highway_distance_km": 1.2,
+        "railway_distance_km": 4.5,
+        "station_distance_km": 12.0,
+        "water_distance_km": 0.5,
+        "power_distance_km": 2.1,
+        "building_impact": 0,
+        "population_exposure": 1200,
+        "land_cover_composition": {
+          "barren": 80,
+          "grassland": 20
+        },
+        "protected_area_overlap_pct": 0,
+        "water_occurrence_pct": 0,
+        "acquisition_friction_index": 0.15
+      },
+      "explanation": {
+        "summary": "Candidate suitable area",
+        "strongest_factors": [
+          "Excellent highway proximity",
+          "Low acquisition friction",
+          "Flat terrain"
+        ],
+        "trade_offs": [
+          "Far from railway station"
+        ],
+        "mandatory_constraints_passed": true,
+        "provenance": {
+          "dem": "Copernicus DEM GLO-30",
+          "landcover": "ESA WorldCover"
+        }
+      }
+    },
+    {
+      "id": "SITE-B",
+      "rank": 2,
+      "mcda_score": 76.2,
+      "metrics": {
+        "area_acres": 50.1,
+        "area_surplus_acres": 0.1,
+        "mean_slope_pct": 5.4,
+        "max_slope_pct": 12.1,
+        "highway_distance_km": 4.2,
+        "railway_distance_km": 1.5,
+        "station_distance_km": 3.0,
+        "water_distance_km": 2.5,
+        "power_distance_km": 0.2,
+        "building_impact": 4,
+        "population_exposure": 8500,
+        "land_cover_composition": {
+          "agriculture": 100
+        },
+        "protected_area_overlap_pct": 0,
+        "water_occurrence_pct": 0,
+        "acquisition_friction_index": 0.65
+      },
+      "explanation": {
+        "summary": "Alternative candidate",
+        "strongest_factors": [
+          "Excellent railway & power proximity"
+        ],
+        "trade_offs": [
+          "High acquisition friction (Agriculture)",
+          "Higher population exposure"
+        ],
+        "mandatory_constraints_passed": true,
+        "provenance": {
+          "dem": "Copernicus DEM GLO-30",
+          "landcover": "ESA WorldCover"
+        }
+      }
+    }
+  ],
+  "geojson": {
+    "type": "FeatureCollection",
+    "features": []
+  }
+}

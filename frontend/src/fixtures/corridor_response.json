@@ -1,0 +1,195 @@
+{
+  "request_id": "req_123",
+  "status": "COMPLETED",
+  "routes": [
+    {
+      "id": "R-01",
+      "rank": 1,
+      "mcda_score": 92.4,
+      "metrics": {
+        "length_km": 260,
+        "population_exposure": 145000,
+        "building_impact": 120,
+        "max_slope_pct": 8.5,
+        "river_crossings": 2,
+        "acquisition_friction_index": 0.35
+      },
+      "explanation": {
+        "summary": "Safest and most optimal route",
+        "advantages": [
+          "Avoids steep slopes",
+          "Low acquisition friction"
+        ],
+        "trade_offs": [
+          "Slightly longer"
+        ],
+        "provenance": [
+          {
+            "dataset": "DEM",
+            "source": "ESA",
+            "resolution": "30m"
+          }
+        ]
+      },
+      "isInfeasible": false
+    },
+    {
+      "id": "R-02",
+      "rank": 2,
+      "mcda_score": 75.1,
+      "metrics": {
+        "length_km": 245.2,
+        "population_exposure": 310000,
+        "building_impact": 340,
+        "max_slope_pct": 18,
+        "river_crossings": 4,
+        "acquisition_friction_index": 0.65
+      },
+      "explanation": {
+        "summary": "Medium feasibility alternative",
+        "advantages": [
+          "Shorter distance"
+        ],
+        "trade_offs": [
+          "Higher population impact",
+          "Moderate slopes"
+        ],
+        "provenance": [
+          {
+            "dataset": "DEM",
+            "source": "ESA",
+            "resolution": "30m"
+          }
+        ]
+      },
+      "isInfeasible": false
+    },
+    {
+      "id": "R-03",
+      "rank": 3,
+      "mcda_score": 42,
+      "metrics": {
+        "length_km": 275,
+        "population_exposure": 420000,
+        "building_impact": 550,
+        "max_slope_pct": 38.5,
+        "river_crossings": 5,
+        "acquisition_friction_index": 0.92
+      },
+      "explanation": {
+        "summary": "Impossible route (Hard Constraints Violated)",
+        "advantages": [],
+        "trade_offs": [
+          "Excessive Max Slope > 35%",
+          "High building conflict"
+        ],
+        "provenance": [
+          {
+            "dataset": "DEM",
+            "source": "ESA",
+            "resolution": "30m"
+          }
+        ]
+      },
+      "isInfeasible": true
+    }
+  ],
+  "geojson": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "R-01"
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              77.209,
+              28.6139
+            ],
+            [
+              76.8,
+              28.3
+            ],
+            [
+              76.5,
+              27.9
+            ],
+            [
+              76.1,
+              27.4
+            ],
+            [
+              75.7873,
+              26.9124
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "R-02"
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              77.209,
+              28.6139
+            ],
+            [
+              76.9,
+              28.2
+            ],
+            [
+              76.7,
+              27.6
+            ],
+            [
+              76.2,
+              27.1
+            ],
+            [
+              75.7873,
+              26.9124
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "R-03"
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              77.209,
+              28.6139
+            ],
+            [
+              76.4,
+              28.5
+            ],
+            [
+              76,
+              28
+            ],
+            [
+              75.5,
+              27.5
+            ],
+            [
+              75.7873,
+              26.9124
+            ]
+          ]
+        }
+      }
+    ]
+  }
+}
