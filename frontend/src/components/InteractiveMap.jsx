@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import maplibregl, { setWorkerUrl } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import * as turf from "@turf/turf";
 import { Plus, Minus } from "lucide-react";
-
-// Required for maplibre-gl v6 + Vite production builds — worker URL must be explicit
-setWorkerUrl(workerUrl);
 
 // Free, open-compatible base map (OpenFreeMap / OpenStreetMap-derived).
 const BASE_STYLE = "https://tiles.openfreemap.org/styles/bright";
