@@ -528,18 +528,21 @@ export default function App() {
       </footer>
     </main>
   );
+}
 
-  function WeightSlider({ label, value, onChange }) {
-    return (
-      <div className="weightSliderItem">
-        <div className="weightSliderLabelRow">
-          <span>{label}</span>
-          <span className="weightSliderValue">{value}%</span>
-        </div>
-        <input type="range" min="0" max="100" className="cleanRangeSlider" value={value} onChange={e => onChange(Number(e.target.value))} />
+// Defined at module scope so React gets a stable component reference
+// across renders. If defined inside App, React remounts on every render
+// which interrupts slider drag immediately.
+function WeightSlider({ label, value, onChange }) {
+  return (
+    <div className="weightSliderItem">
+      <div className="weightSliderLabelRow">
+        <span>{label}</span>
+        <span className="weightSliderValue">{value}%</span>
       </div>
-    );
-  }
+      <input type="range" min="0" max="100" className="cleanRangeSlider" value={value} onChange={e => onChange(Number(e.target.value))} />
+    </div>
+  );
 }
 
 function fmtMetric(v) {
