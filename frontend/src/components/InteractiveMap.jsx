@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import * as maplibregl from "maplibre-gl";
 import * as turf from "@turf/turf";
 import { Plus, Minus } from "lucide-react";
+
+// maplibre-gl is loaded from CDN in index.html — available as window.maplibregl
+// This avoids Rollup/Vite bundling the worker incorrectly in production builds.
+const maplibregl = window.maplibregl;
 
 // Free, open-compatible base map (OpenFreeMap / OpenStreetMap-derived).
 const BASE_STYLE = "https://tiles.openfreemap.org/styles/bright";
