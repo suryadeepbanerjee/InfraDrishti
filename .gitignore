@@ -1,0 +1,95 @@
+# Environments
+.venv/
+.venv_311/
+.venv_py312/
+.venv*/
+env/
+
+# Secrets & environment files — NEVER commit real credentials
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+credentials.json
+service_account.json
+
+# Cache and compiled files
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Outputs and runtime
+backend/outputs/*
+!backend/outputs/.gitkeep
+backend/runtime/*
+!backend/runtime/.gitkeep
+
+# Installers / binaries
+*.exe
+*.msi
+*.whl
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# Datasets and caches
+data/
+*.tif
+*.shp
+*.gpkg
+*.geojson
+*.csv
+*.pbf
+*.osm.pbf
+*.osm
+
+# Backend model/cache directories (large local data)
+backend/models/
+
+# Temporary archives
+*.zip
+*.tar.gz
+*.rar
+
+# Generated JSONs
+routes_*.json
+sites_*.json
+routes_final.json
+routes_updated.json
+sites_final.json
+sites_updated.json
+
+# Supabase CLI local state (not secrets, but local-machine-specific)
+supabase/.temp/
+
+# Node.js (safety net — frontend/.gitignore also covers this)
+node_modules/
+
+# Frontend build artifacts (safety net — frontend/.gitignore also covers this)
+dist/
+dist-ssr/
+
+# Frontend test runner artifacts, screenshots, evidence files
+frontend/test*.cjs
+frontend/check_errors.cjs
+frontend/evidence*.json
+frontend/initial_*.html
+frontend/initial_*.png
+frontend/after_*.png
+
+# Python linter/type-checker caches
+.mypy_cache/
+.ruff_cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*

@@ -1,0 +1,203 @@
+/* ==========================================================================
+   Processing & Analysis Modal Overlay (Clean Minimalist Light Theme)
+   ========================================================================== */
+
+.processingOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.processingModal {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 24px 28px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  text-align: left;
+}
+
+.processingModalHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.processingIconWrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ea580c;
+}
+
+.processingModalTitle {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.processingModalSubtitle {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #ea580c;
+  font-weight: 600;
+  margin-top: 1px;
+}
+
+.statusBadgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #fffaf5;
+  border: 1px solid #fed7aa;
+  border-radius: 6px;
+  margin-bottom: 14px;
+}
+
+.statusBadgeStage {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #ea580c;
+}
+
+.statusBadgeTime {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #9a3412;
+  font-weight: 600;
+}
+
+/* Linear Progress Bar */
+.processingProgressBarTrack {
+  width: 100%;
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.processingProgressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #f97316 0%, #ea580c 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Stages List */
+.stagesList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #ffffff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #fed7aa;
+}
+
+.stageItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.stageDone {
+  color: #10b981;
+}
+
+.stageActive {
+  color: #ea580c;
+  font-weight: 700;
+}
+
+.stagePending {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.spinIcon {
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.modalDisclaimer {
+  margin-top: 14px;
+  font-size: 10px;
+  color: #64748b;
+  line-height: 1.4;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 10px;
+}
+
+/* ERROR STATE */
+.errorState {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.errorMessage {
+  font-size: 11px;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.4;
+}
+
+.dismissBtn {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.15s ease;
+}
+
+.dismissBtn:hover {
+  background: #1e293b;
+}
+
+/* SUCCESS STATE */
+.successState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 10px 0;
+}

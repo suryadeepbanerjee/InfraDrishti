@@ -1,0 +1,1906 @@
+/* ==========================================================================
+   InfraDrishti Modern High-Precision GIS Enterprise Theme
+   ========================================================================== */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+@keyframes pulseMarker {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.8;
+  }
+}
+
+/* ==========================================================================
+   1. TOP NAVIGATION HEADER
+   ========================================================================== */
+.topBar {
+  height: 54px;
+  min-height: 54px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 50;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.brandName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.topNavLinks {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 100%;
+}
+
+.navLinkBtn {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: color 0.15s ease;
+  padding: 0 2px;
+}
+
+.navLinkBtn:hover {
+  color: var(--text-primary);
+}
+
+.navLinkBtn.active {
+  color: #ea580c;
+  font-weight: 600;
+}
+
+.navLinkBtn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background-color: #ea580c;
+  border-radius: 2px 2px 0 0;
+}
+
+.topUtilityIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.iconActionBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.15s ease;
+}
+
+.iconActionBtn:hover {
+  background-color: var(--border-light);
+  color: var(--text-primary);
+}
+
+.profileAvatarBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--border-light);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  margin-left: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.profileAvatarBtn:hover {
+  border-color: var(--border-dark);
+  background-color: #e5e7eb;
+}
+
+/* ==========================================================================
+   2. MAIN THREE-COLUMN WORKSPACE
+   ========================================================================== */
+.mainWorkspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  background-color: #f9fafb;
+}
+
+/* --------------------------------------------------------------------------
+   LEFT CONFIGURATION SIDEBAR
+   -------------------------------------------------------------------------- */
+.leftSidebar {
+  width: 310px;
+  min-width: 310px;
+  max-width: 310px;
+  background-color: #ffffff;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 16px 16px 14px 16px;
+  z-index: 20;
+}
+
+.sidebarScrollContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 4px;
+}
+
+/* Step Indicator */
+.stepIndicatorBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.stepCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--border-dark);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.stepItem.active .stepCircle,
+.stepItem.completed .stepCircle {
+  background: #ea580c;
+  border-color: #ea580c;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(234, 88, 12, 0.25);
+}
+
+.stepItem:hover .stepCircle {
+  border-color: #ea580c;
+  transform: scale(1.08);
+}
+
+.stepLabel {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.stepItem.active .stepLabel,
+.stepItem.completed .stepLabel {
+  color: #ea580c;
+  font-weight: 600;
+}
+
+.stepConnector {
+  flex: 1;
+  height: 2px;
+  background-color: var(--border-color);
+  margin: 0 4px;
+  margin-bottom: 16px;
+  border-radius: 1px;
+  transition: background-color 0.25s ease;
+}
+
+.stepConnector.active {
+  background-color: #ea580c;
+}
+
+/* Section Title */
+.sidebarSectionLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+/* Route Terminals Group Container */
+.terminalsContainer {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2px 4px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.terminalsContainer .locationSearch:first-child {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.terminalsContainer .searchInputBox {
+  border: none;
+  border-radius: 4px;
+  padding: 8px 36px 8px 8px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.terminalsContainer .searchInputBox:focus-within {
+  background: var(--border-light);
+}
+
+/* Swap Terminals Button */
+.swapTerminalsBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  padding: 0;
+}
+
+.swapTerminalsBtn:hover {
+  background: #f8fafc;
+  border-color: var(--border-dark);
+  color: var(--text-primary);
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.swapTerminalsBtn:active {
+  transform: translateY(-50%) rotate(180deg) scale(0.92);
+}
+
+/* Location Search Input Styles */
+.locationSearch {
+  position: relative;
+  width: 100%;
+}
+
+.searchInputBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  transition: border-color 0.15s ease;
+}
+
+.searchInputBox:focus-within {
+  border-color: var(--text-primary);
+}
+
+.geoInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+}
+
+.geoInput::placeholder {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.searchBtnIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.spinIcon {
+  color: var(--accent-blue);
+  animation: spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Suggestions Dropdown */
+.suggestionsMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: var(--shadow-lg);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.suggestionItem {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color 0.12s ease;
+}
+
+.suggestionItem:last-child {
+  border-bottom: none;
+}
+
+.suggestionItem:hover {
+  background-color: var(--border-light);
+}
+
+.suggName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.suggDesc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Dropdown */
+.selectDropdown {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-primary);
+  outline: none;
+  cursor: pointer;
+}
+
+.selectDropdown:focus {
+  border-color: var(--text-primary);
+}
+
+.sectionDivider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2px 0;
+}
+
+/* Checkbox Group */
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkboxLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.customCheckbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-dark);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s ease;
+  flex-shrink: 0;
+}
+
+.customCheckbox.checked {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: #ffffff;
+}
+
+/* MCDA Weights Sliders */
+.weightsHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.weightsSumBadge {
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.weightSliderItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.weightSliderLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.weightSliderValue {
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cleanRangeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #fed7aa;
+  border-radius: 2px;
+  outline: none;
+  accent-color: #ea580c;
+}
+
+.cleanRangeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ea580c;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25);
+  transition: transform 0.1s ease;
+}
+
+.cleanRangeSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.cleanRangeSlider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ea580c;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25);
+}
+
+/* Bottom Action Button */
+.runAnalysisActionBtn {
+  width: 100%;
+  height: 38px;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-top: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.35);
+  transition: all 0.15s ease;
+}
+
+.runAnalysisActionBtn:hover {
+  background: #c2410c;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.45);
+}
+
+/* --------------------------------------------------------------------------
+   CENTRAL MAP WORKSPACE
+   -------------------------------------------------------------------------- */
+.mapWorkspaceContainer {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.mapLibreCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Top Floating Header Controls */
+.mapTopFloatingBar {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.mapTabPillGroup {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  padding: 3px;
+  display: flex;
+  gap: 2px;
+  pointer-events: auto;
+}
+
+.mapTabPillBtn {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.mapTabPillBtn.active {
+  background: var(--border-light);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.mapStatsFloatingCard {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+.mapStatCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.mapStatLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mapStatValue {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.mapStatDivider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+/* Floating Left Toolbar */
+.mapLeftFloatingTools {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+}
+
+.mapToolSquareBtn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mapToolSquareBtn:hover {
+  background: #ffffff;
+  color: var(--text-primary);
+  border-color: var(--border-dark);
+}
+
+.mapToolSquareBtn.active {
+  background: var(--text-primary);
+  color: #ffffff;
+  border-color: var(--text-primary);
+}
+
+/* Floating Right Zoom/3D Controls */
+.mapRightFloatingControls {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+}
+
+/* Floating Bottom Left Collapsible Legend */
+.mapBottomLegendCard {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+  min-width: 170px;
+  transition: all 0.2s ease;
+}
+
+.legendHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.legendCardTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.legendItemRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.legendSymbolPrimary {
+  width: 16px;
+  height: 3px;
+  background: var(--accent-blue);
+  border-radius: 2px;
+}
+
+.legendSymbolAlt {
+  width: 16px;
+  height: 3px;
+  background: var(--text-dim);
+  border-radius: 2px;
+}
+
+.legendSymbolConstraint {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--accent-red);
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 2px;
+}
+
+.legendSymbolPreview {
+  width: 16px;
+  height: 3px;
+  border-top: 2px dashed var(--accent-blue);
+}
+
+.legendSymbolPill {
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.routeColorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT RESULTS PANEL
+   -------------------------------------------------------------------------- */
+.rightResultsPanel {
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
+  background-color: #ffffff;
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  padding: 16px 18px;
+  z-index: 20;
+}
+
+.resultsScrollContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.resultsHeaderTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* Route Cards */
+.routeCardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.routeCardItem {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.routeCardItem:hover {
+  border-color: var(--border-dark);
+  background: #f9fafb;
+}
+
+.routeCardItem.selected {
+  border-color: #93c5fd;
+  background: #f0f7ff;
+}
+
+.routeCardTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.routeCardName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.routeScoreBadge {
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--border-light);
+  color: var(--text-muted);
+}
+
+.routeCardItem.selected .routeScoreBadge {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.routeCardSubtag {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.routeCardItem.selected .routeCardSubtag {
+  color: var(--accent-blue);
+}
+
+.routeCardMetricsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 2px;
+}
+
+.routeMetricCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.routeMetricLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.routeMetricVal {
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Analysis Details Section */
+.analysisDetailsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.analysisDetailsTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.terrainProgressBarContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.terrainProgressLabelRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.terrainProgressBarTrack {
+  width: 100%;
+  height: 5px;
+  background: var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.terrainProgressBarFill {
+  height: 100%;
+  background: var(--text-primary);
+  border-radius: 3px;
+}
+
+.analysisMetricsTable {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.mcdaCategoryGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.mcdaCategoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569;
+  margin-bottom: 2px;
+}
+
+.mcdaCategoryHeader svg {
+  color: #3b82f6;
+}
+
+.mcdaCardItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 6px;
+  padding: 6px 8px;
+  transition: all 0.15s ease;
+}
+
+.mcdaCardItem:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.mcdaCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mcdaCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mcdaCardIconBox {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mcdaCardIconBox.environment {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.mcdaCardIconBox.social {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+
+.mcdaCardIconBox.terrain {
+  background: rgba(99, 102, 241, 0.12);
+  color: #4f46e5;
+}
+
+.mcdaCardIconBox.engineering {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+}
+
+.mcdaCardTitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.mcdaWeightBadge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.mcdaCardRight {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.mcdaCardValue {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.mcdaCardUnit {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.mcdaZeroBadge {
+  font-size: 10px;
+  font-weight: 600;
+  background: #dcfce7;
+  color: #15803d;
+  padding: 1px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.mcdaProgressTrack {
+  width: 100%;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 1px;
+}
+
+.mcdaProgressFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* AI / Route Intelligence Insight Card */
+.mcdaIntelligenceCard {
+  margin-top: 8px;
+  background: #fffaf5;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 6px rgba(234, 88, 12, 0.08);
+}
+
+.mcdaIntelligenceHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ea580c;
+  letter-spacing: -0.01em;
+}
+
+.mcdaSparkleIcon {
+  color: #ea580c;
+}
+
+.mcdaIntelligenceText {
+  font-size: 11px;
+  color: #334155;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Export Section */
+.exportSectionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exportSectionTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.exportButtonsRow {
+  display: flex;
+  gap: 8px;
+}
+
+.exportOutlineBtn {
+  flex: 1;
+  height: 32px;
+  border: 1px solid var(--border-dark);
+  background: #ffffff;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.exportOutlineBtn:hover {
+  background: var(--border-light);
+  border-color: var(--text-muted);
+}
+
+/* ==========================================================================
+   3. GLOBAL FOOTER
+   ========================================================================== */
+.appFooter {
+  height: 36px;
+  min-height: 36px;
+  background: #ffffff;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 12px;
+  color: var(--text-muted);
+  z-index: 50;
+}
+
+.footerBrandCopy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footerBrandCopy strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.footerLinksRow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.footerLink {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.12s ease;
+}
+
+.footerLink:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   4. MODALS & DRAWERS
+   ========================================================================== */
+.drawerOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(3px);
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sideDrawerCard {
+  width: 360px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.2s ease-out;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.drawerHeader {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawerHeader h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.drawerBody {
+  padding: 14px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ==========================================================================
+   MACRO ECONOMIC DASHBOARD ENTERPRISE THEME
+   ========================================================================== */
+.macroPageContainer {
+  padding: 24px 32px;
+  background-color: #f8fafc;
+  min-height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.macroProjectRibbon {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.macroRibbonItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.macroRibbonItem strong {
+  color: #0f172a;
+}
+
+.macroKpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.macroKpiCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.macroKpiCard:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.macroKpiTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.macroKpiLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.macroKpiIconBox {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.macroKpiValue {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.macroKpiSub {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.macroContentSplit {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.macroTableCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.macroCardHeader {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.macroCardTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.macroBudgetBarContainer {
+  padding: 14px 18px 6px;
+}
+
+.macroBudgetBar {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #e2e8f0;
+  margin-bottom: 10px;
+}
+
+.macroBudgetLegend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.macroLegendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.macroSidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.macroInfoCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.macroInfoCardTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.macroInfoCardText {
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ==========================================================================
+   GLOBAL INTELLIGENCE & SATELLITE REGISTRY ENTERPRISE THEME
+   ========================================================================== */
+.globalPageContainer {
+  padding: 24px 32px;
+  background-color: #f8fafc;
+  min-height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.globalKpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.globalKpiCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.globalKpiTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.globalKpiLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.globalKpiValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.globalKpiSub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+.globalMainSplit {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.globalTableCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.globalCardHeader {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.globalFilterGroup {
+  display: flex;
+  gap: 6px;
+}
+
+.globalFilterBtn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.globalFilterBtn.active {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.globalProviderPill {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #334155;
+  display: inline-block;
+}
+
+.globalStatusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.globalSideCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.globalArchRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.globalArchRow:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.globalArchIconBox {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE BREAKPOINTS)
+   ========================================================================== */
+.nationalKpiGrid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Tablet adjustments (961px - 1180px) */
+@media (max-width: 1180px) {
+  .leftSidebar {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+  .rightResultsPanel {
+    width: 290px;
+    min-width: 290px;
+    max-width: 290px;
+  }
+  .macroKpiGrid,
+  .globalKpiGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile & Small Tablet (max-width: 960px) */
+@media (max-width: 960px) {
+  .app {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    width: 100vw;
+  }
+
+  /* Top Navigation Bar: Mobile Responsive */
+  .topBar {
+    height: auto;
+    min-height: auto;
+    padding: 8px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .brandName {
+    font-size: 15px;
+  }
+
+  .topNavLinks {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    height: 38px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 4px;
+    scrollbar-width: none;
+  }
+
+  .topNavLinks::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navLinkBtn {
+    font-size: 13px;
+    padding: 0 4px;
+  }
+
+  .topUtilityIcons {
+    margin-left: auto;
+    gap: 6px;
+  }
+
+  .iconActionBtn {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Main Workspace: Stack Vertically on Mobile */
+  .mainWorkspace {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Left Configuration Sidebar */
+  .leftSidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    overflow: visible;
+    padding: 14px;
+  }
+
+  .sidebarScrollContent {
+    overflow-y: visible;
+    max-height: none;
+    padding-right: 0;
+  }
+
+  /* Central Map: Mobile Viewport */
+  .mapWorkspaceContainer {
+    width: 100%;
+    height: 400px;
+    min-height: 400px;
+    max-height: 55vh;
+    flex: none;
+    order: 2;
+  }
+
+  /* Right Results Panel: Stack below map */
+  .rightResultsPanel {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    overflow: visible;
+    padding: 14px;
+    order: 3;
+  }
+
+  .resultsScrollContent {
+    overflow-y: visible;
+  }
+
+  /* Floating Map Controls on Mobile */
+  .mapTopFloatingBar {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .mapTabPillGroup {
+    padding: 2px;
+  }
+
+  .mapTabPillBtn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .mapStatsFloatingCard {
+    padding: 4px 10px;
+    gap: 12px;
+  }
+
+  .mapStatLabel {
+    font-size: 10px;
+  }
+
+  .mapStatValue {
+    font-size: 18px;
+  }
+
+  .mapBottomLegendCard {
+    bottom: 8px;
+    left: 8px;
+    max-width: 220px;
+    padding: 6px 10px;
+  }
+
+  /* Macro & Global Dashboards on Mobile */
+  .macroPageContainer,
+  .globalPageContainer {
+    padding: 14px;
+    min-height: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  .macroKpiGrid,
+  .globalKpiGrid,
+  .nationalKpiGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  .macroContentSplit,
+  .globalMainSplit {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .macroProjectRibbon {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .macroTableCard,
+  .globalTableCard {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .macroTableCard table,
+  .globalTableCard table {
+    min-width: 520px;
+  }
+
+  /* Export buttons on mobile */
+  .exportButtonsRow {
+    flex-direction: row;
+  }
+}
+
+/* Small Smartphone Viewport (max-width: 560px) */
+@media (max-width: 560px) {
+  .macroKpiGrid,
+  .globalKpiGrid,
+  .nationalKpiGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mapWorkspaceContainer {
+    height: 330px;
+    min-height: 330px;
+  }
+
+  .mapStatsFloatingCard {
+    display: none; /* Hide dense stats card on tiny screens for maximum map touch surface */
+  }
+
+  .stepIndicatorBar {
+    padding: 2px 0 8px 0;
+  }
+
+  .stepLabel {
+    font-size: 10px;
+  }
+
+  .stepCircle {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+}
