@@ -6,5 +6,9 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     exclude: ['maplibre-gl']
+  },
+  build: {
+    target: 'esnext'
   }
 })
+
