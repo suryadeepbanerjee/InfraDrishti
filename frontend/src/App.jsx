@@ -279,7 +279,7 @@ export default function App() {
 
                 <div className="sectionDivider" />
 
-                <div className="weightsHeaderRow">
+                <div className="weightsHeaderRow" style={{ marginTop: '10px' }}>
                   <span className="sidebarSectionLabel" style={{ margin: 0 }}>Corridor Width</span>
                   <span className="weightsSumBadge">{corridorWidthM} m</span>
                 </div>
