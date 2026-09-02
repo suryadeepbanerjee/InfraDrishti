@@ -8,7 +8,15 @@ export default defineConfig({
     exclude: ['maplibre-gl']
   },
   build: {
-    target: 'esnext'
+    target: 'esnext',
+    rollupOptions: {
+      external: ['maplibre-gl'],
+      output: {
+        globals: {
+          'maplibre-gl': 'maplibregl'
+        }
+      }
+    }
   }
 })
 

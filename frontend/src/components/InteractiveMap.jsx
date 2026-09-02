@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import * as maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 import * as turf from "@turf/turf";
 import { Plus, Minus } from "lucide-react";
 
