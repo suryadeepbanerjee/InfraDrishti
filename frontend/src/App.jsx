@@ -277,8 +277,6 @@ export default function App() {
                   <option value="Power Transmission Line">Power Transmission Line</option>
                 </select>
 
-                <div className="sectionDivider" />
-
                 <div className="weightsHeaderRow" style={{ marginTop: '10px' }}>
                   <span className="sidebarSectionLabel" style={{ margin: 0 }}>Corridor Width</span>
                   <span className="weightsSumBadge">{corridorWidthM} m</span>
