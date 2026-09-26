@@ -1,4 +1,4 @@
-# InfraDrishti
+# InfraDrishtis
 
 **Geospatial Intelligence for Smarter Infrastructure Planning**
 
